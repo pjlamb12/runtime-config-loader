@@ -1,10 +1,27 @@
-import { NgModule } from '@angular/core';
-import { RuntimeConfigLoaderLibComponent } from './runtime-config-loader-lib.component';
+import { NgModule, ModuleWithProviders } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+import { RuntimeConfigLoaderService } from './runtime-config-loader-lib.service';
+import { RuntimeConfig } from './runtime-config';
+
+export function initConfig(configSvc: RuntimeConfigLoaderService) {
+	return () => configSvc.loadConfig();
+}
 
 @NgModule({
-  imports: [
-  ],
-  declarations: [RuntimeConfigLoaderLibComponent],
-  exports: [RuntimeConfigLoaderLibComponent]
+	imports: [HttpClientModule],
+	providers: [RuntimeConfigLoaderService],
 })
-export class RuntimeConfigLoaderLibModule { }
+export class RuntimeConfigLoaderModule {
+	static forRoot(config: RuntimeConfig): ModuleWithProviders {
+		return {
+			ngModule: RuntimeConfigLoaderModule,
+			providers: [
+				{
+					provide: RuntimeConfig,
+					useValue: config,
+				},
+				RuntimeConfigLoaderService,
+			],
+		};
+	}
+}
