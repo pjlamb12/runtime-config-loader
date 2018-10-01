@@ -1,27 +1,38 @@
-# RuntimeConfigLoader
+# Angular Runtime Configuration Loader
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.2.4.
+Most applications require certain configuration values that can be changed at runtime of the app. The `environment.ts` files in an Angular application technically work for setting configuration values in an app, but those are buildtime configuration values. This means that they are set when the application is built, and can't be changed unless the app is built again.
 
-## Development server
+## Overview
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+This library provides an easy way to load a JSON file with configuration values that you can use throughout the application. The default location of the JSON file is in the `assets` folder, at `./assets/config.json`. When the service loads the file, it stores that configuration object in a local variable which can be accessed via the `getConfig()` and `getConfigObjectKey(key: string)` methods. `getConfig` returns the entire configuration object; `getConfigObjectKey(key: string)` returns part of the configuration object, namely the part defined by the key passed in.
 
-## Code scaffolding
+## How to Implement
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+In your `app.module.ts` file, add the following to the `@NgModule` decorator:
 
-## Build
+```js
+imports: [..., RuntimeConfigLoaderModule, ...],
+providers: [
+  ...,
+  {
+    provide: APP_INITIALIZER,
+    useFactory: initConfig,
+    deps: [RuntimeConfigLoaderService],
+    multi: true
+  },
+  ...
+]
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+The `initConfig` value for the `useFactory` key should also be imported from this library. If you implement the library exactly as it is above, the configuration file needs to be in the `./assets/config.json` location as mentioned above. If you'd like to load the file from a different location, provide that location in the `.forRoot()` method when importing the `RuntimeConfigLoaderModule`:
 
-## Running unit tests
+```js
+imports: [
+  ...,
+  RuntimeConfigLoaderModule.forRoot(
+    { fileUrl: './path/to/config/config.json' }
+  ),
+  ...]
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Make sure that the path you provide here is accessible by the Angular application, meaning that the file is somewhere the app can load it. In my opinion, the `assets` folder is the easiest place to work from.
