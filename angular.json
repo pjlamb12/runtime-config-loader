@@ -121,6 +121,41 @@
           }
         }
       }
+    },
+    "runtime-config-loader-lib": {
+      "root": "projects/runtime-config-loader-lib",
+      "sourceRoot": "projects/runtime-config-loader-lib/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/runtime-config-loader-lib/tsconfig.lib.json",
+            "project": "projects/runtime-config-loader-lib/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/runtime-config-loader-lib/src/test.ts",
+            "tsConfig": "projects/runtime-config-loader-lib/tsconfig.spec.json",
+            "karmaConfig": "projects/runtime-config-loader-lib/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/runtime-config-loader-lib/tsconfig.lib.json",
+              "projects/runtime-config-loader-lib/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "runtime-config-loader"

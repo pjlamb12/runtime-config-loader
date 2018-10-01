@@ -16,6 +16,14 @@
     "lib": [
       "es2017",
       "dom"
-    ]
+    ],
+    "paths": {
+      "runtime-config-loader-lib": [
+        "dist/runtime-config-loader-lib"
+      ],
+      "runtime-config-loader-lib/*": [
+        "dist/runtime-config-loader-lib/*"
+      ]
+    }
   }
 }
