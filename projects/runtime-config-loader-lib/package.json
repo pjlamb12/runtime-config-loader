@@ -1,11 +1,12 @@
 {
 	"name": "runtime-config-loader",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"author": {
 		"email": "preston@prestonlamb.com",
 		"name": "Preston Lamb",
 		"url": "http://www.prestonlamb.com"
 	},
+	"homepage": "https://stackblitz.com/edit/runtime-config-loader-demo",
 	"maintainers": [
 		"Preston Lamb"
 	],
