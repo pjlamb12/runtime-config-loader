@@ -1,5 +1,7 @@
 # Angular Runtime Configuration Loader
 
+[![Join the chat at https://gitter.im/runtime-config-loader/Lobby](https://badges.gitter.im/runtime-config-loader/Lobby.svg)](https://gitter.im/runtime-config-loader/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Most applications require certain configuration values that can be changed at runtime of the app. The `environment.ts` files in an Angular application technically work for setting configuration values in an app, but those are buildtime configuration values. This means that they are set when the application is built, and can't be changed unless the app is built again.
 
 ## Overview
