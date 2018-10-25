@@ -1,6 +1,6 @@
 {
 	"name": "runtime-config-loader",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"author": {
 		"email": "preston@prestonlamb.com",
 		"name": "Preston Lamb",
@@ -23,7 +23,7 @@
 		"config"
 	],
 	"peerDependencies": {
-		"@angular/common": "^6.0.0-rc.0 || ^6.0.0",
-		"@angular/core": "^6.0.0-rc.0 || ^6.0.0"
+		"@angular/common": ">=6.0.0",
+		"@angular/core": ">=6.0.0"
 	}
 }

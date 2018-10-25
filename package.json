@@ -1,6 +1,6 @@
 {
 	"name": "runtime-config-loader",
-	"version": "1.0.2",
+	"version": "1.0.4",
 	"scripts": {
 		"ng": "ng",
 		"start": "ng serve",
@@ -8,6 +8,7 @@
 		"build:lib": "ng build --prod runtime-config-loader-lib",
 		"pack:lib": "cd dist/runtime-config-loader-lib && npm pack",
 		"package": "npm run build:lib && npm run pack:lib",
+		"deploy": "npm run package && npm publish dist/runtime-config-loader-lib",
 		"test": "ng test",
 		"lint": "ng lint",
 		"e2e": "ng e2e"
