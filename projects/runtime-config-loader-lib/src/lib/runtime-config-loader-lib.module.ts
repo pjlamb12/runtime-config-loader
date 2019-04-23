@@ -7,6 +7,7 @@ export function initConfig(configSvc: RuntimeConfigLoaderService) {
 	return () => configSvc.loadConfig();
 }
 
+// @dynamic
 @NgModule({
 	imports: [HttpClientModule],
 	providers: [
