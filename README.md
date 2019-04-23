@@ -6,33 +6,25 @@ Most applications require certain configuration values that can be changed at ru
 
 ## Overview
 
-This library provides an easy way to load a JSON file with configuration values that you can use throughout the application. The default location of the JSON file is in the `assets` folder, at `./assets/config.json`. When the service loads the file, it stores that configuration object in a local variable which can be accessed via the `getConfig()` and `getConfigObjectKey(key: string)` methods. `getConfig` returns the entire configuration object; `getConfigObjectKey(key: string)` returns part of the configuration object, namely the part defined by the key passed in. In some cases, the `config.json` is not finished loading before other modules/services are, so the above methods will return null. If that is the case, subscribe to the `configSubject` and access the configuration object that way.
+This library provides an easy way to load a JSON file with configuration values or make an HTTP GET call to an API endpoint that returns those values. You can then use that configuration throughout the application. The default location of the JSON file is in the `assets` folder, at `./assets/config.json`. When the service loads the file, it stores that configuration object in a local variable which can be accessed via the `getConfig()` and `getConfigObjectKey(key: string)` methods. `getConfig` returns the entire configuration object; `getConfigObjectKey(key: string)` returns part of the configuration object, namely the part defined by the key passed in. In some cases, the `config.json` is not finished loading before other modules/services are, so the above methods will return null. If that is the case, subscribe to the `configSubject` and access the configuration object that way.
 
 ## How to Implement
 
 In your `app.module.ts` file, add the following to the `@NgModule` decorator:
 
-```js
+```ts
 imports: [..., RuntimeConfigLoaderModule, ...],
-providers: [
-  ...,
-  {
-    provide: APP_INITIALIZER,
-    useFactory: initConfig,
-    deps: [RuntimeConfigLoaderService],
-    multi: true
-  },
-  ...
-]
 ```
 
-The `initConfig` value for the `useFactory` key should also be imported from this library. If you implement the library exactly as it is above, the configuration file needs to be in the `./assets/config.json` location as mentioned above. If you'd like to load the file from a different location, provide that location in the `.forRoot()` method when importing the `RuntimeConfigLoaderModule`:
+That's it; it's that simple. In the `RuntimeConfigLoaderModule`, the `APP_INITIALIZER` token is used to run a function which loads the configuration from a file or an API endpoint that can be used throughout the application.
+
+If you implement the library exactly as it is above, the configuration file needs to be in the `./assets/config.json` location as mentioned above. If you'd like to load the file from a different location, provide that location in the `.forRoot()` method when importing the `RuntimeConfigLoaderModule`:
 
 ```js
 imports: [
   ...,
   RuntimeConfigLoaderModule.forRoot(
-    { fileUrl: './path/to/config/config.json' }
+    { configUrl: './path/to/config/config.json' }
   ),
   ...]
 ```
