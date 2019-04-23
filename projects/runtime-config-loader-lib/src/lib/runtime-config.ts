@@ -1,7 +1,7 @@
 export class RuntimeConfig {
-	fileUrl: string;
+	configUrl: string;
 
 	constructor(obj: any = {}) {
-		this.fileUrl = obj.fileUrl || './assets/config.json';
+		this.configUrl = obj.configUrl || './assets/config.json';
 	}
 }
