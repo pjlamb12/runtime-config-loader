@@ -5,19 +5,19 @@ import { Subject } from 'rxjs';
 
 @Injectable()
 export class RuntimeConfigLoaderService {
-	private fileUrl: string = './assets/config.json';
+	private configUrl: string = './assets/config.json';
 	private configObject;
 	public configSubject: Subject<any> = new Subject<any>();
 
 	constructor(private _http: HttpClient, @Optional() config: RuntimeConfig) {
 		if (config) {
-			this.fileUrl = config.fileUrl;
+			this.configUrl = config.configUrl;
 		}
 	}
 
 	loadConfig(): Promise<any> {
 		return this._http
-			.get(this.fileUrl)
+			.get(this.configUrl)
 			.toPromise()
 			.then((configData: any) => {
 				this.configObject = configData;
