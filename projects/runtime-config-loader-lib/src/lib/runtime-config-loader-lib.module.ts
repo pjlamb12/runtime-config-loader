@@ -21,7 +21,7 @@ export function initConfig(configSvc: RuntimeConfigLoaderService) {
 	],
 })
 export class RuntimeConfigLoaderModule {
-	static forRoot(config: RuntimeConfig): ModuleWithProviders {
+	static forRoot(config: RuntimeConfig): ModuleWithProviders<RuntimeConfigLoaderModule> {
 		return {
 			ngModule: RuntimeConfigLoaderModule,
 			providers: [
