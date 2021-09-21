@@ -23,6 +23,7 @@ export class RuntimeConfigLoaderService {
 				this.configSubject.next(this.configObject);
 			}),
 			catchError((err: any) => {
+				console.error('Error loading config: ', err);
 				this.configObject = null;
 				this.configSubject.next(this.configObject);
 				return of(null);
