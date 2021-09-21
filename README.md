@@ -1,32 +1,98 @@
-# Angular Runtime Configuration Loader
+# RuntimeConfigLoader
 
-[![Join the chat at https://gitter.im/runtime-config-loader/Lobby](https://badges.gitter.im/runtime-config-loader/Lobby.svg)](https://gitter.im/runtime-config-loader/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+This project was generated using [Nx](https://nx.dev).
 
-Most applications require certain configuration values that can be changed at runtime of the app. The `environment.ts` files in an Angular application technically work for setting configuration values in an app, but those are buildtime configuration values. This means that they are set when the application is built, and can't be changed unless the app is built again.
+<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>
 
-## Overview
+🔎 **Smart, Extensible Build Framework**
 
-This library provides an easy way to load a JSON file with configuration values or make an HTTP GET call to an API endpoint that returns those values. You can then use that configuration throughout the application. The default location of the JSON file is in the `assets` folder, at `./assets/config.json`. When the service loads the file, it stores that configuration object in a local variable which can be accessed via the `RuntimeConfigLoaderService` through `getConfig()` and `getConfigObjectKey(key: string)` methods. `getConfig` returns the entire configuration object; `getConfigObjectKey(key: string)` returns part of the configuration object, namely the part defined by the key passed in. In some cases, the `config.json` is not finished loading before other modules/services are, so the above methods will return null. If that is the case, subscribe to the `configSubject` and access the configuration object that way.
+## Quick Start & Documentation
 
-## How to Implement
+[Nx Documentation](https://nx.dev/angular)
 
-In your `app.module.ts` file, add the following to the `@NgModule` decorator:
+[10-minute video showing all Nx features](https://nx.dev/getting-started/intro)
 
-```ts
-imports: [..., RuntimeConfigLoaderModule, ...],
-```
+[Interactive Tutorial](https://nx.dev/tutorial/01-create-application)
 
-That's it; it's that simple. In the `RuntimeConfigLoaderModule`, the `APP_INITIALIZER` token is used to run a function which loads the configuration from a file or an API endpoint that can be used throughout the application.
+## Adding capabilities to your workspace
 
-If you implement the library exactly as it is above, the configuration file needs to be in the `./assets/config.json` location as mentioned above. If you'd like to load the file from a different location, provide that location in the `.forRoot()` method when importing the `RuntimeConfigLoaderModule`:
+Nx supports many plugins which add capabilities for developing different types of applications and different tools.
 
-```js
-imports: [
-  ...,
-  RuntimeConfigLoaderModule.forRoot(
-    { configUrl: './path/to/config/config.json' }
-  ),
-  ...]
-```
+These capabilities include generating applications, libraries, etc as well as the devtools to test, and build projects as well.
 
-Make sure that the path you provide here is accessible by the Angular application, meaning that the file is somewhere the app can load it. In my opinion, the `assets` folder is the easiest place to work from.
+Below are our core plugins:
+
+-   [Angular](https://angular.io)
+    -   `ng add @nrwl/angular`
+-   [React](https://reactjs.org)
+    -   `ng add @nrwl/react`
+-   Web (no framework frontends)
+    -   `ng add @nrwl/web`
+-   [Nest](https://nestjs.com)
+    -   `ng add @nrwl/nest`
+-   [Express](https://expressjs.com)
+    -   `ng add @nrwl/express`
+-   [Node](https://nodejs.org)
+    -   `ng add @nrwl/node`
+
+There are also many [community plugins](https://nx.dev/community) you could add.
+
+## Generate an application
+
+Run `ng g @nrwl/angular:app my-app` to generate an application.
+
+> You can use any of the plugins above to generate applications as well.
+
+When using Nx, you can create multiple applications and libraries in the same workspace.
+
+## Generate a library
+
+Run `ng g @nrwl/angular:lib my-lib` to generate a library.
+
+> You can also use any of the plugins above to generate libraries as well.
+
+Libraries are shareable across libraries and applications. They can be imported from `@runtime-config-loader/mylib`.
+
+## Development server
+
+Run `ng serve my-app` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
+
+## Code scaffolding
+
+Run `ng g component my-component --project=my-app` to generate a new component.
+
+## Build
+
+Run `ng build my-app` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+
+## Running unit tests
+
+Run `ng test my-app` to execute the unit tests via [Jest](https://jestjs.io).
+
+Run `nx affected:test` to execute the unit tests affected by a change.
+
+## Running end-to-end tests
+
+Run `ng e2e my-app` to execute the end-to-end tests via [Cypress](https://www.cypress.io).
+
+Run `nx affected:e2e` to execute the end-to-end tests affected by a change.
+
+## Understand your workspace
+
+Run `nx dep-graph` to see a diagram of the dependencies of your projects.
+
+## Further help
+
+Visit the [Nx Documentation](https://nx.dev/angular) to learn more.
+
+## ☁ Nx Cloud
+
+### Distributed Computation Caching & Distributed Task Execution
+
+<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-cloud-card.png"></p>
+
+Nx Cloud pairs with Nx in order to enable you to build and test code more rapidly, by up to 10 times. Even teams that are new to Nx can connect to Nx Cloud and start saving time instantly.
+
+Teams using Nx gain the advantage of building full-stack applications with their preferred framework alongside Nx’s advanced code generation and project dependency graph, plus a unified experience for both frontend and backend developers.
+
+Visit [Nx Cloud](https://nx.app/) to learn more.
