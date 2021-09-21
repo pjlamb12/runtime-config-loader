@@ -1,178 +1,200 @@
 {
-  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
-  "newProjectRoot": "projects",
   "projects": {
     "runtime-config-loader": {
-      "root": "",
-      "sourceRoot": "src",
+      "projectType": "library",
+      "root": "libs/runtime-config-loader",
+      "sourceRoot": "libs/runtime-config-loader/src",
+      "prefix": "runtime-config-loader",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "outputs": ["dist/libs/runtime-config-loader"],
+          "options": {
+            "project": "libs/runtime-config-loader/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/runtime-config-loader/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "libs/runtime-config-loader/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/runtime-config-loader"],
+          "options": {
+            "jestConfig": "libs/runtime-config-loader/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/runtime-config-loader/src/**/*.ts",
+              "libs/runtime-config-loader/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "runtime-config-loader-demo": {
       "projectType": "application",
-      "prefix": "app",
-      "schematics": {},
+      "root": "apps/runtime-config-loader-demo",
+      "sourceRoot": "apps/runtime-config-loader-demo/src",
+      "prefix": "runtime-config-loader",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
+          "outputs": ["{options.outputPath}"],
           "options": {
-            "aot": true,
-            "outputPath": "dist/runtime-config-loader",
-            "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.app.json",
+            "outputPath": "dist/apps/runtime-config-loader-demo",
+            "index": "apps/runtime-config-loader-demo/src/index.html",
+            "main": "apps/runtime-config-loader-demo/src/main.ts",
+            "polyfills": "apps/runtime-config-loader-demo/src/polyfills.ts",
+            "tsConfig": "apps/runtime-config-loader-demo/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
             "assets": [
-              "src/favicon.ico",
-              "src/assets"
+              "apps/runtime-config-loader-demo/src/favicon.ico",
+              "apps/runtime-config-loader-demo/src/assets"
             ],
-            "styles": [
-              "src/styles.css"
-            ],
+            "styles": ["apps/runtime-config-loader-demo/src/styles.scss"],
             "scripts": []
           },
           "configurations": {
             "production": {
               "budgets": [
                 {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
                 }
               ],
               "fileReplacements": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+                  "replace": "apps/runtime-config-loader-demo/src/environments/environment.ts",
+                  "with": "apps/runtime-config-loader-demo/src/environments/environment.prod.ts"
                 }
               ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
             }
-          }
+          },
+          "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "runtime-config-loader:build"
-          },
           "configurations": {
             "production": {
-              "browserTarget": "runtime-config-loader:build:production"
+              "browserTarget": "runtime-config-loader-demo:build:production"
+            },
+            "development": {
+              "browserTarget": "runtime-config-loader-demo:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "runtime-config-loader:build"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.spec.json",
-            "karmaConfig": "src/karma.conf.js",
-            "styles": [
-              "src/styles.css"
-            ],
-            "scripts": [],
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ]
+            "browserTarget": "runtime-config-loader-demo:build"
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@nrwl/linter:eslint",
           "options": {
-            "tsConfig": [
-              "src/tsconfig.app.json",
-              "src/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
+            "lintFilePatterns": [
+              "apps/runtime-config-loader-demo/src/**/*.ts",
+              "apps/runtime-config-loader-demo/src/**/*.html"
             ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/runtime-config-loader-demo"],
+          "options": {
+            "jestConfig": "apps/runtime-config-loader-demo/jest.config.js",
+            "passWithNoTests": true
           }
         }
       }
     },
-    "runtime-config-loader-e2e": {
-      "root": "e2e/",
+    "runtime-config-loader-demo-e2e": {
+      "root": "apps/runtime-config-loader-demo-e2e",
+      "sourceRoot": "apps/runtime-config-loader-demo-e2e/src",
       "projectType": "application",
       "architect": {
         "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
+          "builder": "@nrwl/cypress:cypress",
           "options": {
-            "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "runtime-config-loader:serve"
+            "cypressConfig": "apps/runtime-config-loader-demo-e2e/cypress.json",
+            "devServerTarget": "runtime-config-loader-demo:serve:development",
+            "tsConfig": "apps/runtime-config-loader-demo-e2e/tsconfig.json"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "runtime-config-loader:serve:production"
+              "devServerTarget": "runtime-config-loader-demo:serve:production"
             }
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
           "options": {
-            "tsConfig": "e2e/tsconfig.e2e.json",
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
-    "runtime-config-loader-lib": {
-      "root": "projects/runtime-config-loader-lib",
-      "sourceRoot": "projects/runtime-config-loader-lib/src",
-      "projectType": "library",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/runtime-config-loader-lib/tsconfig.lib.json",
-            "project": "projects/runtime-config-loader-lib/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "project": "projects/runtime-config-loader-lib/ng-package.prod.json",
-              "tsConfig": "projects/runtime-config-loader-lib/tsconfig.lib.prod.json"
-            }
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/runtime-config-loader-lib/src/test.ts",
-            "tsConfig": "projects/runtime-config-loader-lib/tsconfig.spec.json",
-            "karmaConfig": "projects/runtime-config-loader-lib/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/runtime-config-loader-lib/tsconfig.lib.json",
-              "projects/runtime-config-loader-lib/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
+            "lintFilePatterns": [
+              "apps/runtime-config-loader-demo-e2e/**/*.{js,ts}"
             ]
           }
         }
       }
     }
   },
-  "defaultProject": "runtime-config-loader",
   "cli": {
-    "analytics": "ef48ec33-b0f4-401b-9c5b-a05fbc0b72ca"
-  }
+    "defaultCollection": "@nrwl/angular",
+    "packageManager": "npm"
+  },
+  "schematics": {
+    "@nrwl/angular": {
+      "application": {
+        "linter": "eslint"
+      },
+      "library": {
+        "linter": "eslint"
+      },
+      "storybook-configuration": {
+        "linter": "eslint"
+      }
+    },
+    "@nrwl/angular:application": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest"
+    },
+    "@nrwl/angular:component": {
+      "style": "scss"
+    }
+  },
+  "defaultProject": "runtime-config-loader-demo"
 }

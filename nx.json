@@ -1,0 +1,42 @@
+{
+  "npmScope": "runtime-config-loader",
+  "affected": {
+    "defaultBase": "master"
+  },
+  "implicitDependencies": {
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
+    },
+    ".eslintrc.json": "*"
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nrwl/nx-cloud",
+      "options": {
+        "cacheableOperations": ["build", "lint", "test", "e2e"],
+        "accessToken": "M2EyMjNlOWUtNjk1MC00Nzc1LWEyZWYtZWFiNDQ0ZjliNzY0fHJlYWQtd3JpdGU="
+      }
+    }
+  },
+  "targetDependencies": {
+    "build": [
+      {
+        "target": "build",
+        "projects": "dependencies"
+      }
+    ]
+  },
+  "projects": {
+    "runtime-config-loader": {
+      "tags": ["scope:shared", "type:util"]
+    },
+    "runtime-config-loader-demo": {
+      "tags": []
+    },
+    "runtime-config-loader-demo-e2e": {
+      "tags": [],
+      "implicitDependencies": ["runtime-config-loader-demo"]
+    }
+  }
+}
