@@ -1,6 +1,47 @@
 {
   "version": 1,
   "projects": {
+    "runtime-config-loader": {
+      "projectType": "library",
+      "root": "libs/runtime-config-loader",
+      "sourceRoot": "libs/runtime-config-loader/src",
+      "prefix": "runtime-config-loader",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "outputs": ["dist/libs/runtime-config-loader"],
+          "options": {
+            "project": "libs/runtime-config-loader/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/runtime-config-loader/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "libs/runtime-config-loader/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/runtime-config-loader"],
+          "options": {
+            "jestConfig": "libs/runtime-config-loader/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/runtime-config-loader/src/**/*.ts",
+              "libs/runtime-config-loader/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "runtime-config-loader-demo": {
       "projectType": "application",
       "root": "apps/runtime-config-loader-demo",

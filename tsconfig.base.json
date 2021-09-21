@@ -14,7 +14,9 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "runtime-config-loader": ["libs/runtime-config-loader/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
