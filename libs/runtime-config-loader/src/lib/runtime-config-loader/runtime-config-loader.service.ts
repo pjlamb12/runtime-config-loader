@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, Optional } from '@angular/core';
 import { RuntimeConfig } from '../runtime-config';
-import { Observable, of, Subject } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { forkJoin, Observable, of, Subject, zip } from 'rxjs';
+import { catchError, take, tap } from 'rxjs/operators';
 
 @Injectable()
 export class RuntimeConfigLoaderService {
-	private configUrl: string = './assets/config.json';
+	private configUrl: string | string[] = './assets/config.json';
 	private configObject: any = null;
 	public configSubject: Subject<any> = new Subject<any>();
 
@@ -17,9 +17,23 @@ export class RuntimeConfigLoaderService {
 	}
 
 	loadConfig(): Observable<any> {
-		return this._http.get(this.configUrl).pipe(
-			tap((configData: any) => {
-				this.configObject = configData;
+		const urls: string[] = Array.isArray(this.configUrl)
+			? this.configUrl
+			: [this.configUrl];
+
+		const observables: Observable<any>[] = urls.map((url) =>
+			this.makeHttpCall(url)
+		);
+
+		return forkJoin(observables).pipe(
+			tap((configDataArray: any[]) => {
+				this.configObject = configDataArray.reduce(
+					(acc, configData) => {
+						return { ...acc, ...configData };
+					},
+					{}
+				);
+
 				this.configSubject.next(this.configObject);
 			}),
 			catchError((err: any) => {
@@ -29,6 +43,10 @@ export class RuntimeConfigLoaderService {
 				return of(null);
 			})
 		);
+	}
+
+	private makeHttpCall(url: string): Observable<any> {
+		return this._http.get(url).pipe(take(1));
 	}
 
 	getConfig() {
