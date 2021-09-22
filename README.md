@@ -1,98 +1,58 @@
-# RuntimeConfigLoader
+# Angular Runtime Configuration Loader
 
-This project was generated using [Nx](https://nx.dev).
+Most applications require certain configuration values that can be changed at runtime of the app. The `environment.ts` files in an Angular application technically work for setting configuration values in an app, but those are buildtime configuration values. This means that they are set when the application is built, and can't be changed unless the app is built again.
 
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>
+## Overview
 
-🔎 **Smart, Extensible Build Framework**
+This library provides an easy way to load one or more JSON files with configuration values or make one or more HTTP GET calls to an API endpoint that returns those values. The config objects that are returned from the call(s) will be combined into a single configuration object. You can then use that configuration throughout the application. The default location of the JSON file is in the `assets` folder, at `./assets/config.json`. When the service loads the file, it stores that configuration object in a local variable which can be accessed via the `getConfig()` and `getConfigObjectKey(key: string)` methods. `getConfig` returns the entire configuration object; `getConfigObjectKey(key: string)` returns part of the configuration object, namely the part defined by the key passed in. In some cases, the `config.json` is not finished loading before other modules/services are, so the above methods will return null. If that is the case, subscribe to the `configSubject` and access the configuration object that way.
 
-## Quick Start & Documentation
+## How to Implement
 
-[Nx Documentation](https://nx.dev/angular)
+In your `app.module.ts` file, add the following to the `@NgModule` decorator:
 
-[10-minute video showing all Nx features](https://nx.dev/getting-started/intro)
+```ts
+imports: [..., RuntimeConfigLoaderModule, ...],
+```
 
-[Interactive Tutorial](https://nx.dev/tutorial/01-create-application)
+That's it; it's that simple. In the `RuntimeConfigLoaderModule`, the `APP_INITIALIZER` token is used to run a function which loads the configuration from a file or an API endpoint that can be used throughout the application.
 
-## Adding capabilities to your workspace
+If you implement the library exactly as it is above, the configuration file needs to be in the `./assets/config.json` location as mentioned above. If you'd like to load the file from a different location, provide that location in the `.forRoot()` method when importing the `RuntimeConfigLoaderModule`:
 
-Nx supports many plugins which add capabilities for developing different types of applications and different tools.
+```ts
+imports: [
+  ...,
+  RuntimeConfigLoaderModule.forRoot(
+    { configUrl: './path/to/config/config.json' }
+  ),
+  ...]
+```
 
-These capabilities include generating applications, libraries, etc as well as the devtools to test, and build projects as well.
+If you want to load multiple files, the value of `configUrl` should be an array of strings:
 
-Below are our core plugins:
+```ts
+imports: [
+  ...,
+  RuntimeConfigLoaderModule.forRoot(
+    { configUrl: ['./path/to/config/config-1.json', './path/to/config/config-2.json'] }
+  ),
+  ...]
+```
 
--   [Angular](https://angular.io)
-    -   `ng add @nrwl/angular`
--   [React](https://reactjs.org)
-    -   `ng add @nrwl/react`
--   Web (no framework frontends)
-    -   `ng add @nrwl/web`
--   [Nest](https://nestjs.com)
-    -   `ng add @nrwl/nest`
--   [Express](https://expressjs.com)
-    -   `ng add @nrwl/express`
--   [Node](https://nodejs.org)
-    -   `ng add @nrwl/node`
+> Make sure that the path(s) you provide here is accessible by the Angular application, meaning that the file is somewhere the app can load it. In my opinion, the `assets` folder is the easiest place to work from.
 
-There are also many [community plugins](https://nx.dev/community) you could add.
+## Multiple Config Paths
 
-## Generate an application
+One reason you may want to load multiple configuration objects is so that you can set the configuration on your machine without affecting anyone else. For example, you could have a `local.config.json` file that is not included in source control. Some of the values in that file would overwrite the values in a config file that everyone can use. Another use case is that some config values don't change between environments, and some do. The ones that don't change could go in one file, the ones that do change could go in a second file. Each developer/environment can provide the second file with values they want or need.
 
-Run `ng g @nrwl/angular:app my-app` to generate an application.
+It's important to know that if an attribute is repeated in two configuration files, the latest value is kept. So, let's say you have `apiUrl` in both files, `config-1.json` and `config-2.json`. Let's assume the files are passed in to the `forRoot` method like this:
 
-> You can use any of the plugins above to generate applications as well.
+```ts
+imports: [
+  ...,
+  RuntimeConfigLoaderModule.forRoot(
+    { configUrl: ['./path/to/config/config-1.json', './path/to/config/config-2.json'] }
+  ),
+  ...]
+```
 
-When using Nx, you can create multiple applications and libraries in the same workspace.
-
-## Generate a library
-
-Run `ng g @nrwl/angular:lib my-lib` to generate a library.
-
-> You can also use any of the plugins above to generate libraries as well.
-
-Libraries are shareable across libraries and applications. They can be imported from `@runtime-config-loader/mylib`.
-
-## Development server
-
-Run `ng serve my-app` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng g component my-component --project=my-app` to generate a new component.
-
-## Build
-
-Run `ng build my-app` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test my-app` to execute the unit tests via [Jest](https://jestjs.io).
-
-Run `nx affected:test` to execute the unit tests affected by a change.
-
-## Running end-to-end tests
-
-Run `ng e2e my-app` to execute the end-to-end tests via [Cypress](https://www.cypress.io).
-
-Run `nx affected:e2e` to execute the end-to-end tests affected by a change.
-
-## Understand your workspace
-
-Run `nx dep-graph` to see a diagram of the dependencies of your projects.
-
-## Further help
-
-Visit the [Nx Documentation](https://nx.dev/angular) to learn more.
-
-## ☁ Nx Cloud
-
-### Distributed Computation Caching & Distributed Task Execution
-
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-cloud-card.png"></p>
-
-Nx Cloud pairs with Nx in order to enable you to build and test code more rapidly, by up to 10 times. Even teams that are new to Nx can connect to Nx Cloud and start saving time instantly.
-
-Teams using Nx gain the advantage of building full-stack applications with their preferred framework alongside Nx’s advanced code generation and project dependency graph, plus a unified experience for both frontend and backend developers.
-
-Visit [Nx Cloud](https://nx.app/) to learn more.
+In this case, the `apiUrl` value from `config-2.json` will override the value from `config-1.json`.
