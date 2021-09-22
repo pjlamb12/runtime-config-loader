@@ -14,10 +14,16 @@ describe('RuntimeConfigLoaderService', () => {
 	};
 	let mockConfigData1 = {
 		apiUrl: 'https://test-api.com',
+		nestedObject: {
+			nested: 'value',
+		},
 	};
 	let mockConfigData2 = {
 		apiUrl: 'https://test-2-api.com',
 		appName: 'App Name 2',
+		nestedObject: {
+			nested: 'value 2',
+		},
 	};
 	let mockHttpService: any;
 
