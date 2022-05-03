@@ -8,7 +8,9 @@
 		"start": "nx serve",
 		"build": "nx build",
 		"test": "nx test",
-		"affected:test": "nx affected --target test --parallel --maxParallel 3"
+		"affected:test": "nx affected --target test --parallel --maxParallel 3",
+		"build:lib": "ng build runtime-config-loader --configuration production && npm run build:copy-readme",
+		"build:copy-readme": "cp ./README.md ./dist/libs/runtime-config-loader"
 	},
 	"private": true,
 	"dependencies": {
