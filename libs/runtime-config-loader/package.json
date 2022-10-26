@@ -1,6 +1,6 @@
 {
 	"name": "runtime-config-loader",
-	"version": "5.0.0",
+	"version": "5.0.2",
 	"author": {
 		"email": "preston.j.lamb@gmail.com",
 		"name": "Preston Lamb",
@@ -24,7 +24,9 @@
 	],
 	"peerDependencies": {
 		"@angular/common": ">=13.0.0",
-		"@angular/core": ">=13.0.0"
+		"@angular/core": ">=13.0.0",
+		"@angular/platform-browser-dynamic": ">=13.0.0",
+		"rxjs": ">=6.6.0"
 	},
 	"dependencies": {
 		"tslib": "^2.3.0"
