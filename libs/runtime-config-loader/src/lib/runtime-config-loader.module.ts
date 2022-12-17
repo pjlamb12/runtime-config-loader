@@ -1,11 +1,18 @@
 import { HttpClientModule } from '@angular/common/http';
-import { APP_INITIALIZER, ModuleWithProviders, NgModule } from '@angular/core';
+import {
+	APP_INITIALIZER,
+	InjectionToken,
+	ModuleWithProviders,
+	NgModule,
+} from '@angular/core';
 import { RuntimeConfig } from './runtime-config';
 import { RuntimeConfigLoaderService } from './runtime-config-loader/runtime-config-loader.service';
 
 export function initConfig(configSvc: RuntimeConfigLoaderService) {
 	return () => configSvc.loadConfig();
 }
+
+export const RUNTIME_APP_CONFIG = new InjectionToken<string>('App Config');
 
 @NgModule({
 	imports: [HttpClientModule],
@@ -16,6 +23,13 @@ export function initConfig(configSvc: RuntimeConfigLoaderService) {
 			useFactory: initConfig,
 			deps: [RuntimeConfigLoaderService],
 			multi: true,
+		},
+		{
+			provide: RUNTIME_APP_CONFIG,
+			useFactory: (config: RuntimeConfigLoaderService) => {
+				return config.runtimeConfigObject;
+			},
+			deps: [RuntimeConfigLoaderService],
 		},
 	],
 })

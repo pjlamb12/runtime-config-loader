@@ -7,13 +7,17 @@ import { catchError, take, tap } from 'rxjs/operators';
 @Injectable()
 export class RuntimeConfigLoaderService {
 	private configUrl: string | string[] = './assets/config.json';
-	private configObject: any = null;
+	private configObject: Record<string, any> | null = null;
 	public configSubject: Subject<any> = new Subject<any>();
 
 	constructor(private _http: HttpClient, @Optional() config: RuntimeConfig) {
 		if (config) {
 			this.configUrl = config.configUrl;
 		}
+	}
+
+	get runtimeConfigObject() {
+		return this.configObject;
 	}
 
 	loadConfig(): Observable<any> {
