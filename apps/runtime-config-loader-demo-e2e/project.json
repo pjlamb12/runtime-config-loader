@@ -1,0 +1,32 @@
+{
+	"name": "runtime-config-loader-demo-e2e",
+	"$schema": "../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "apps/runtime-config-loader-demo-e2e/src",
+	"projectType": "application",
+	"targets": {
+		"e2e": {
+			"executor": "@nx/cypress:cypress",
+			"options": {
+				"cypressConfig": "apps/runtime-config-loader-demo-e2e/cypress.json",
+				"devServerTarget": "runtime-config-loader-demo:serve:development",
+				"tsConfig": "apps/runtime-config-loader-demo-e2e/tsconfig.json"
+			},
+			"configurations": {
+				"production": {
+					"devServerTarget": "runtime-config-loader-demo:serve:production"
+				}
+			}
+		},
+		"lint": {
+			"executor": "@nx/linter:eslint",
+			"outputs": ["{options.outputFile}"],
+			"options": {
+				"lintFilePatterns": [
+					"apps/runtime-config-loader-demo-e2e/**/*.{js,ts}"
+				]
+			}
+		}
+	},
+	"tags": [],
+	"implicitDependencies": ["runtime-config-loader-demo"]
+}
