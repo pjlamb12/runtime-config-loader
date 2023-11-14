@@ -26,8 +26,7 @@
 			"executor": "@nx/jest:jest",
 			"outputs": ["{workspaceRoot}/coverage/libs/runtime-config-loader"],
 			"options": {
-				"jestConfig": "libs/runtime-config-loader/jest.config.ts",
-				"passWithNoTests": true
+				"jestConfig": "libs/runtime-config-loader/jest.config.ts"
 			}
 		},
 		"lint": {

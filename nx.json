@@ -53,9 +53,18 @@
 			"inputs": ["default", "{workspaceRoot}/.eslintrc.json"],
 			"cache": true
 		},
-		"test": {
+		"@nx/jest:jest": {
 			"inputs": ["default", "^default", "{workspaceRoot}/jest.preset.js"],
-			"cache": true
+			"cache": true,
+			"options": {
+				"passWithNoTests": true
+			},
+			"configurations": {
+				"ci": {
+					"ci": true,
+					"codeCoverage": true
+				}
+			}
 		}
 	},
 	"nxCloudAccessToken": "M2EyMjNlOWUtNjk1MC00Nzc1LWEyZWYtZWFiNDQ0ZjliNzY0fHJlYWQtd3JpdGU=",
