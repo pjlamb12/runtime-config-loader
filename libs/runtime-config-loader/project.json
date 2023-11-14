@@ -7,7 +7,7 @@
 	"targets": {
 		"build": {
 			"executor": "@nx/angular:package",
-			"outputs": ["dist/libs/runtime-config-loader"],
+			"outputs": ["{workspaceRoot}/dist/libs/runtime-config-loader"],
 			"options": {
 				"project": "libs/runtime-config-loader/ng-package.json"
 			},
@@ -23,14 +23,13 @@
 		},
 		"test": {
 			"executor": "@nx/jest:jest",
-			"outputs": ["coverage/libs/runtime-config-loader"],
+			"outputs": ["{workspaceRoot}/coverage/libs/runtime-config-loader"],
 			"options": {
-				"jestConfig": "libs/runtime-config-loader/jest.config.ts",
-				"passWithNoTests": true
+				"jestConfig": "libs/runtime-config-loader/jest.config.ts"
 			}
 		},
 		"lint": {
-			"executor": "@nx/linter:eslint",
+			"executor": "@nx/eslint:lint",
 			"options": {
 				"lintFilePatterns": [
 					"libs/runtime-config-loader/src/**/*.ts",
