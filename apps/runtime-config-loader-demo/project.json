@@ -84,7 +84,9 @@
 		},
 		"test": {
 			"executor": "@nx/jest:jest",
-			"outputs": ["coverage/apps/runtime-config-loader-demo"],
+			"outputs": [
+				"{workspaceRoot}/coverage/apps/runtime-config-loader-demo"
+			],
 			"options": {
 				"jestConfig": "apps/runtime-config-loader-demo/jest.config.ts",
 				"passWithNoTests": true

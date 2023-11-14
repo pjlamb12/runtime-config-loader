@@ -7,9 +7,10 @@
 	"targets": {
 		"build": {
 			"executor": "@nx/angular:package",
-			"outputs": ["dist/libs/runtime-config-loader"],
+			"outputs": ["{workspaceRoot}/dist/libs/runtime-config-loader"],
 			"options": {
-				"project": "libs/runtime-config-loader/ng-package.json"
+				"project": "libs/runtime-config-loader/ng-package.json",
+				"updateBuildableProjectDepsInPackageJson": true
 			},
 			"configurations": {
 				"production": {
@@ -23,7 +24,7 @@
 		},
 		"test": {
 			"executor": "@nx/jest:jest",
-			"outputs": ["coverage/libs/runtime-config-loader"],
+			"outputs": ["{workspaceRoot}/coverage/libs/runtime-config-loader"],
 			"options": {
 				"jestConfig": "libs/runtime-config-loader/jest.config.ts",
 				"passWithNoTests": true
