@@ -3,6 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, Subject, forkJoin, of } from 'rxjs';
 import { catchError, take, tap } from 'rxjs/operators';
 import { RUNTIME_CONFIG_LOADER_CONFIG } from '../runtime-config';
+import { merge } from 'lodash';
 
 @Injectable()
 export class RuntimeConfigLoaderService {
@@ -41,7 +42,7 @@ export class RuntimeConfigLoaderService {
 			tap((configDataArray: any[]) => {
 				this.configObject = configDataArray.reduce(
 					(acc, configData) => {
-						return { ...acc, ...configData };
+						return merge(acc, configData);
 					},
 					{}
 				);

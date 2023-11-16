@@ -1,4 +1,8 @@
 {
 	"unique": "This is a unique value",
-	"testValue": "This is a test"
+	"testValue": "This is a test",
+	"deepMergeExample": {
+		"attr1": "value 1",
+		"attr2": "value 2"
+	}
 }
