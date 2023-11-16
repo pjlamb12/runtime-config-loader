@@ -16,13 +16,14 @@ imports: [..., RuntimeConfigLoaderModule, ...],
 
 That's it; it's that simple. In the `RuntimeConfigLoaderModule`, the `APP_INITIALIZER` token is used to run a function which loads the configuration from a file or an API endpoint that can be used throughout the application.
 
-If you implement the library exactly as it is above, the configuration file needs to be in the `./assets/config.json` location as mentioned above. If you'd like to load the file from a different location, provide that location in the `.forRoot()` method when importing the `RuntimeConfigLoaderModule`:
+If you implement the library exactly as it is above, the configuration file needs to be in the `./assets/config.json` location as mentioned above. If you'd like to load the file from a different location, provide that using an injection token in the app's main providers array:
 
 ```ts
-imports: [
+providers: [
   ...,
-  RuntimeConfigLoaderModule.forRoot(
-    { configUrl: './path/to/config/config.json' }
+  {
+    provide: RUNTIME_CONFIG_LOADER_CONFIG,
+    useValue: { configUrl: './path/to/config/config.json' }
   ),
   ...]
 ```
@@ -30,29 +31,35 @@ imports: [
 If you want to load multiple files, the value of `configUrl` should be an array of strings:
 
 ```ts
-imports: [
+providers: [
   ...,
-  RuntimeConfigLoaderModule.forRoot(
-    { configUrl: ['./path/to/config/config-1.json', './path/to/config/config-2.json'] }
+  {
+    provide: RUNTIME_CONFIG_LOADER_CONFIG,
+    useValue: { configUrl: ['./path/to/config/config-1.json', './path/to/config/config-2.json'] }
   ),
   ...]
 ```
 
 > Make sure that the path(s) you provide here is accessible by the Angular application, meaning that the file is somewhere the app can load it. In my opinion, the `assets` folder is the easiest place to work from.
 
-## Multiple Config Paths
+## Local Config File
 
-One reason you may want to load multiple configuration objects is so that you can set the configuration on your machine without affecting anyone else. For example, you could have a `local.config.json` file that is not included in source control. Some of the values in that file would overwrite the values in a config file that everyone can use. Another use case is that some config values don't change between environments, and some do. The ones that don't change could go in one file, the ones that do change could go in a second file. Each developer/environment can provide the second file with values they want or need.
+One reason you may want to load multiple configuration objects is so that you can set the configuration on your machine without affecting anyone else. For example, you could have a `local.config.json` file that is not included in source control. Some of the values in that file would overwrite the values in a config file that everyone can use. There is an improved way of providing the local config file for your app. There are two new attributes on the config object, `localConfigUrl` and `useLocalConfig`. The first, `localConfigUrl`, is the path to the local config file. Again, generally, this file generally won't be checked in to source control. The second is called `userLocalConfig`. The recommendation is to set the value of this to `isDevMode()` from `@angular/core`, but you could set the value of this to true or false based on any other condition you would like.
 
-It's important to know that if an attribute is repeated in two configuration files, the latest value is kept. So, let's say you have `apiUrl` in both files, `config-1.json` and `config-2.json`. Let's assume the files are passed in to the `forRoot` method like this:
+The values in the local config file will overwrite all previous values on other config objects that have been loaded. This way you can have a general app config file that everyone uses, but you can overwrite it on your machine without worrying about checking it in and messing up other people's applications.
+
+> Note: If you provide a file URL and tell the service to load that config, it will load it. If the file doesn't exist, it will produce a 404. That's why it's recommended that the `useLocalConfig` value is set to `isDevMode()`, so that you don't have a 404 show up in production when it shouldn't.
 
 ```ts
 imports: [
   ...,
-  RuntimeConfigLoaderModule.forRoot(
-    { configUrl: ['./path/to/config/config-1.json', './path/to/config/config-2.json'] }
+  {
+    provide: RUNTIME_CONFIG_LOADER_CONFIG,
+    useValue: {
+      configUrl: './path/to/config/config.json',
+      localConfigUrl: './path/to/config/local.config.json',
+      useLocalConfig: isDevMode()
+    }
   ),
   ...]
 ```
-
-In this case, the `apiUrl` value from `config-2.json` will override the value from `config-1.json`.

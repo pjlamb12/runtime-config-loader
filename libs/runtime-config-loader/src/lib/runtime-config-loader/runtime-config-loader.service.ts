@@ -1,20 +1,23 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, Optional } from '@angular/core';
-import { RuntimeConfig } from '../runtime-config';
-import { forkJoin, Observable, of, Subject, zip } from 'rxjs';
+import { Inject, Injectable, inject } from '@angular/core';
+import { merge } from 'lodash';
+import { Observable, Subject, forkJoin, of } from 'rxjs';
 import { catchError, take, tap } from 'rxjs/operators';
+import { RUNTIME_CONFIG_LOADER_CONFIG, RuntimeConfig } from '../runtime-config';
 
 @Injectable()
 export class RuntimeConfigLoaderService {
-	private configUrl: string | string[] = './assets/config.json';
+	private configUrl: string | string[] =
+		(this.config && this.config.configUrl) || './assets/config.json';
+	private localConfigUrl: string =
+		(this.config && this.config.localConfigUrl) || '';
 	private configObject: any = null;
 	public configSubject: Subject<any> = new Subject<any>();
 
-	constructor(private _http: HttpClient, @Optional() config: RuntimeConfig) {
-		if (config) {
-			this.configUrl = config.configUrl;
-		}
-	}
+	constructor(
+		private _http: HttpClient,
+		@Inject(RUNTIME_CONFIG_LOADER_CONFIG) private config: RuntimeConfig
+	) {}
 
 	loadConfig(): Observable<any> {
 		const urls: string[] = Array.isArray(this.configUrl)
@@ -25,11 +28,21 @@ export class RuntimeConfigLoaderService {
 			this.makeHttpCall(url)
 		);
 
+		if (this.localConfigUrl && this.config.useLocalConfig) {
+			const localConfig = this.makeHttpCall(this.localConfigUrl).pipe(
+				catchError(() => {
+					return of({});
+				})
+			);
+
+			observables.push(localConfig);
+		}
+
 		return forkJoin(observables).pipe(
 			tap((configDataArray: any[]) => {
 				this.configObject = configDataArray.reduce(
 					(acc, configData) => {
-						return { ...acc, ...configData };
+						return merge(acc, configData);
 					},
 					{}
 				);

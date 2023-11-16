@@ -1,6 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
-import { APP_INITIALIZER, ModuleWithProviders, NgModule } from '@angular/core';
-import { RuntimeConfig } from './runtime-config';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { RuntimeConfigLoaderService } from './runtime-config-loader/runtime-config-loader.service';
 
 export function initConfig(configSvc: RuntimeConfigLoaderService) {
@@ -19,19 +18,4 @@ export function initConfig(configSvc: RuntimeConfigLoaderService) {
 		},
 	],
 })
-export class RuntimeConfigLoaderModule {
-	static forRoot(
-		config: RuntimeConfig
-	): ModuleWithProviders<RuntimeConfigLoaderModule> {
-		return {
-			ngModule: RuntimeConfigLoaderModule,
-			providers: [
-				{
-					provide: RuntimeConfig,
-					useValue: config,
-				},
-				RuntimeConfigLoaderService,
-			],
-		};
-	}
-}
+export class RuntimeConfigLoaderModule {}

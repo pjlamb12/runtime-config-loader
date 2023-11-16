@@ -22,10 +22,11 @@
 		"@angular/platform-browser": "17.0.2",
 		"@angular/platform-browser-dynamic": "17.0.2",
 		"@angular/router": "17.0.2",
+		"@nx/angular": "17.1.2",
+		"lodash": "^4.17.21",
 		"rxjs": "~6.6.0",
 		"tslib": "^2.0.0",
-		"zone.js": "0.14.2",
-		"@nx/angular": "17.1.2"
+		"zone.js": "0.14.2"
 	},
 	"devDependencies": {
 		"@angular-devkit/build-angular": "17.0.0",
@@ -38,11 +39,13 @@
 		"@angular/compiler-cli": "17.0.2",
 		"@angular/language-service": "17.0.2",
 		"@nx/cypress": "17.1.2",
+		"@nx/eslint": "17.1.2",
 		"@nx/eslint-plugin": "17.1.2",
 		"@nx/jest": "17.1.2",
 		"@nx/workspace": "17.1.2",
 		"@schematics/angular": "17.0.0",
 		"@types/jest": "29.4.4",
+		"@types/lodash": "^4.14.201",
 		"@types/node": "14.14.33",
 		"@typescript-eslint/eslint-plugin": "6.11.0",
 		"@typescript-eslint/parser": "6.11.0",
@@ -62,7 +65,6 @@
 		"prettier": "2.7.1",
 		"ts-jest": "29.1.0",
 		"ts-node": "10.9.1",
-		"typescript": "5.2.2",
-		"@nx/eslint": "17.1.2"
+		"typescript": "5.2.2"
 	}
 }
