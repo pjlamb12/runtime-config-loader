@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { Inject, Injectable, inject } from '@angular/core';
 import { merge } from 'lodash';
 import { Observable, Subject, forkJoin, of } from 'rxjs';
 import { catchError, take, tap } from 'rxjs/operators';
@@ -7,14 +7,17 @@ import { RUNTIME_CONFIG_LOADER_CONFIG, RuntimeConfig } from '../runtime-config';
 
 @Injectable()
 export class RuntimeConfigLoaderService {
-	private _http: HttpClient = inject(HttpClient);
-	private config: RuntimeConfig = inject(RUNTIME_CONFIG_LOADER_CONFIG);
 	private configUrl: string | string[] =
 		(this.config && this.config.configUrl) || './assets/config.json';
 	private localConfigUrl: string =
 		(this.config && this.config.localConfigUrl) || '';
 	private configObject: any = null;
 	public configSubject: Subject<any> = new Subject<any>();
+
+	constructor(
+		private _http: HttpClient,
+		@Inject(RUNTIME_CONFIG_LOADER_CONFIG) private config: RuntimeConfig
+	) {}
 
 	loadConfig(): Observable<any> {
 		const urls: string[] = Array.isArray(this.configUrl)
