@@ -1,7 +1,4 @@
 {
-	"affected": {
-		"defaultBase": "main"
-	},
 	"implicitDependencies": {
 		"package.json": {
 			"dependencies": "*",
@@ -25,7 +22,8 @@
 			"unitTestRunner": "jest"
 		},
 		"@nx/angular:component": {
-			"style": "scss"
+			"style": "scss",
+			"type": "component"
 		},
 		"@nx/angular": {
 			"application": {
@@ -36,7 +34,58 @@
 			},
 			"storybook-configuration": {
 				"linter": "eslint"
+			},
+			"directive": {
+				"type": "directive"
+			},
+			"service": {
+				"type": "service"
+			},
+			"scam": {
+				"type": "component"
+			},
+			"scam-directive": {
+				"type": "directive"
+			},
+			"guard": {
+				"typeSeparator": "."
+			},
+			"interceptor": {
+				"typeSeparator": "."
+			},
+			"module": {
+				"typeSeparator": "."
+			},
+			"pipe": {
+				"typeSeparator": "."
+			},
+			"resolver": {
+				"typeSeparator": "."
 			}
+		},
+		"@schematics/angular:component": {
+			"type": "component"
+		},
+		"@schematics/angular:directive": {
+			"type": "directive"
+		},
+		"@schematics/angular:service": {
+			"type": "service"
+		},
+		"@schematics/angular:guard": {
+			"typeSeparator": "."
+		},
+		"@schematics/angular:interceptor": {
+			"typeSeparator": "."
+		},
+		"@schematics/angular:module": {
+			"typeSeparator": "."
+		},
+		"@schematics/angular:pipe": {
+			"typeSeparator": "."
+		},
+		"@schematics/angular:resolver": {
+			"typeSeparator": "."
 		}
 	},
 	"$schema": "./node_modules/nx/schemas/nx-schema.json",
@@ -47,10 +96,6 @@
 		},
 		"e2e": {
 			"inputs": ["default", "^default"],
-			"cache": true
-		},
-		"lint": {
-			"inputs": ["default", "{workspaceRoot}/.eslintrc.json"],
 			"cache": true
 		},
 		"@nx/jest:jest": {
@@ -65,8 +110,14 @@
 					"codeCoverage": true
 				}
 			}
+		},
+		"@nx/eslint:lint": {
+			"inputs": ["default", "{workspaceRoot}/.eslintrc.json"],
+			"cache": true
 		}
 	},
 	"nxCloudAccessToken": "M2EyMjNlOWUtNjk1MC00Nzc1LWEyZWYtZWFiNDQ0ZjliNzY0fHJlYWQtd3JpdGU=",
-	"parallel": 1
+	"parallel": 1,
+	"useInferencePlugins": false,
+	"defaultBase": "main"
 }

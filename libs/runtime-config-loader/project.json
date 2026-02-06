@@ -4,20 +4,20 @@
 	"projectType": "library",
 	"sourceRoot": "libs/runtime-config-loader/src",
 	"prefix": "runtime-config-loader",
+	"tags": ["scope:shared", "type:util"],
 	"targets": {
 		"build": {
 			"executor": "@nx/angular:package",
 			"outputs": ["{workspaceRoot}/dist/libs/runtime-config-loader"],
 			"options": {
-				"project": "libs/runtime-config-loader/ng-package.json"
+				"project": "libs/runtime-config-loader/ng-package.json",
+				"tsConfig": "libs/runtime-config-loader/tsconfig.lib.json"
 			},
 			"configurations": {
 				"production": {
 					"tsConfig": "libs/runtime-config-loader/tsconfig.lib.prod.json"
 				},
-				"development": {
-					"tsConfig": "libs/runtime-config-loader/tsconfig.lib.json"
-				}
+				"development": {}
 			},
 			"defaultConfiguration": "production"
 		},
@@ -25,18 +25,12 @@
 			"executor": "@nx/jest:jest",
 			"outputs": ["{workspaceRoot}/coverage/libs/runtime-config-loader"],
 			"options": {
-				"jestConfig": "libs/runtime-config-loader/jest.config.ts"
+				"jestConfig": "libs/runtime-config-loader/jest.config.ts",
+				"tsConfig": "libs/runtime-config-loader/tsconfig.spec.json"
 			}
 		},
 		"lint": {
-			"executor": "@nx/eslint:lint",
-			"options": {
-				"lintFilePatterns": [
-					"libs/runtime-config-loader/src/**/*.ts",
-					"libs/runtime-config-loader/src/**/*.html"
-				]
-			}
+			"executor": "@nx/eslint:lint"
 		}
-	},
-	"tags": ["scope:shared", "type:util"]
+	}
 }

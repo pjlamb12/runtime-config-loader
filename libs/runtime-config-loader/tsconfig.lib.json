@@ -7,8 +7,9 @@
 		"declarationMap": true,
 		"inlineSources": true,
 		"types": [],
-		"lib": ["dom", "es2018"],
-		"useDefineForClassFields": false
+		"lib": ["dom", "es2022"],
+		"useDefineForClassFields": false,
+		"moduleResolution": "bundler"
 	},
 	"exclude": [
 		"src/test-setup.ts",

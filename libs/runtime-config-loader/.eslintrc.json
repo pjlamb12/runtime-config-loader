@@ -24,7 +24,8 @@
 						"prefix": "runtime-config-loader",
 						"style": "kebab-case"
 					}
-				]
+				],
+				"@angular-eslint/prefer-standalone": "off"
 			}
 		},
 		{

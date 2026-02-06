@@ -4,6 +4,7 @@
 	"projectType": "application",
 	"sourceRoot": "apps/runtime-config-loader-demo/src",
 	"prefix": "runtime-config-loader",
+	"tags": [],
 	"targets": {
 		"build": {
 			"executor": "@angular-devkit/build-angular:browser",
@@ -65,7 +66,8 @@
 					"buildTarget": "runtime-config-loader-demo:build:development"
 				}
 			},
-			"defaultConfiguration": "development"
+			"defaultConfiguration": "development",
+			"continuous": true
 		},
 		"extract-i18n": {
 			"executor": "@angular-devkit/build-angular:extract-i18n",
@@ -74,13 +76,7 @@
 			}
 		},
 		"lint": {
-			"executor": "@nx/eslint:lint",
-			"options": {
-				"lintFilePatterns": [
-					"apps/runtime-config-loader-demo/src/**/*.ts",
-					"apps/runtime-config-loader-demo/src/**/*.html"
-				]
-			}
+			"executor": "@nx/eslint:lint"
 		},
 		"test": {
 			"executor": "@nx/jest:jest",
@@ -88,9 +84,9 @@
 				"{workspaceRoot}/coverage/apps/runtime-config-loader-demo"
 			],
 			"options": {
-				"jestConfig": "apps/runtime-config-loader-demo/jest.config.ts"
+				"jestConfig": "apps/runtime-config-loader-demo/jest.config.ts",
+				"tsConfig": "apps/runtime-config-loader-demo/tsconfig.spec.json"
 			}
 		}
-	},
-	"tags": []
+	}
 }
