@@ -3,6 +3,8 @@
 	"$schema": "../../node_modules/nx/schemas/project-schema.json",
 	"sourceRoot": "apps/runtime-config-loader-demo-e2e/src",
 	"projectType": "application",
+	"tags": [],
+	"implicitDependencies": ["runtime-config-loader-demo"],
 	"targets": {
 		"e2e": {
 			"executor": "@nx/cypress:cypress",
@@ -19,14 +21,7 @@
 		},
 		"lint": {
 			"executor": "@nx/eslint:lint",
-			"outputs": ["{options.outputFile}"],
-			"options": {
-				"lintFilePatterns": [
-					"apps/runtime-config-loader-demo-e2e/**/*.{js,ts}"
-				]
-			}
+			"outputs": ["{options.outputFile}"]
 		}
-	},
-	"tags": [],
-	"implicitDependencies": ["runtime-config-loader-demo"]
+	}
 }

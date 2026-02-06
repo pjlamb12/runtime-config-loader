@@ -4,6 +4,7 @@
 	"projectType": "application",
 	"sourceRoot": "apps/runtime-config-loader-demo/src",
 	"prefix": "runtime-config-loader",
+	"tags": [],
 	"targets": {
 		"build": {
 			"executor": "@angular-devkit/build-angular:browser",
@@ -74,13 +75,7 @@
 			}
 		},
 		"lint": {
-			"executor": "@nx/eslint:lint",
-			"options": {
-				"lintFilePatterns": [
-					"apps/runtime-config-loader-demo/src/**/*.ts",
-					"apps/runtime-config-loader-demo/src/**/*.html"
-				]
-			}
+			"executor": "@nx/eslint:lint"
 		},
 		"test": {
 			"executor": "@nx/jest:jest",
@@ -91,6 +86,5 @@
 				"jestConfig": "apps/runtime-config-loader-demo/jest.config.ts"
 			}
 		}
-	},
-	"tags": []
+	}
 }
