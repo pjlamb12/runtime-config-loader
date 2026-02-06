@@ -3,7 +3,7 @@ import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
 	let app: AppComponent;
-	let mockRuntimeConfigService = {} as RuntimeConfigLoaderService;
+	const mockRuntimeConfigService = {} as RuntimeConfigLoaderService;
 
 	beforeEach(() => {
 		app = new AppComponent(

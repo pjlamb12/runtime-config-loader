@@ -10,15 +10,14 @@
 			"executor": "@nx/angular:package",
 			"outputs": ["{workspaceRoot}/dist/libs/runtime-config-loader"],
 			"options": {
-				"project": "libs/runtime-config-loader/ng-package.json"
+				"project": "libs/runtime-config-loader/ng-package.json",
+				"tsConfig": "libs/runtime-config-loader/tsconfig.lib.json"
 			},
 			"configurations": {
 				"production": {
 					"tsConfig": "libs/runtime-config-loader/tsconfig.lib.prod.json"
 				},
-				"development": {
-					"tsConfig": "libs/runtime-config-loader/tsconfig.lib.json"
-				}
+				"development": {}
 			},
 			"defaultConfiguration": "production"
 		},
@@ -26,7 +25,8 @@
 			"executor": "@nx/jest:jest",
 			"outputs": ["{workspaceRoot}/coverage/libs/runtime-config-loader"],
 			"options": {
-				"jestConfig": "libs/runtime-config-loader/jest.config.ts"
+				"jestConfig": "libs/runtime-config-loader/jest.config.ts",
+				"tsConfig": "libs/runtime-config-loader/tsconfig.spec.json"
 			}
 		},
 		"lint": {

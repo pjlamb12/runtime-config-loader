@@ -6,19 +6,19 @@ import { RuntimeConfigLoaderService } from './runtime-config-loader.service';
 
 describe('RuntimeConfigLoaderService', () => {
 	let service: RuntimeConfigLoaderService;
-	let mockSingleConfig: RuntimeConfig = {
+	const mockSingleConfig: RuntimeConfig = {
 		configUrl: './test-config.json',
 	};
-	let mockDoubleConfig: RuntimeConfig = {
+	const mockDoubleConfig: RuntimeConfig = {
 		configUrl: ['./test-config.json', './test-config2.json'],
 	};
-	let mockConfigData1 = {
+	const mockConfigData1 = {
 		apiUrl: 'https://test-api.com',
 		nestedObject: {
 			nested: 'value',
 		},
 	};
-	let mockConfigData2 = {
+	const mockConfigData2 = {
 		apiUrl: 'https://test-2-api.com',
 		appName: 'App Name 2',
 		nestedObject: {

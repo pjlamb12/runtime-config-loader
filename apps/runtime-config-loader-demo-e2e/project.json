@@ -10,8 +10,7 @@
 			"executor": "@nx/cypress:cypress",
 			"options": {
 				"cypressConfig": "apps/runtime-config-loader-demo-e2e/cypress.json",
-				"devServerTarget": "runtime-config-loader-demo:serve:development",
-				"tsConfig": "apps/runtime-config-loader-demo-e2e/tsconfig.json"
+				"devServerTarget": "runtime-config-loader-demo:serve:development"
 			},
 			"configurations": {
 				"production": {
