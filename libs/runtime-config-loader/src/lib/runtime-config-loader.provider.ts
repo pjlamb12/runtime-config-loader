@@ -45,3 +45,23 @@ export function provideRuntimeConfig<T = any>(
 
 	return makeEnvironmentProviders(providers);
 }
+
+export function provideConfigToken<T, K extends keyof T>(
+	token: InjectionToken<T[K]>,
+	key: K
+): Provider;
+export function provideConfigToken<R = any>(
+	token: InjectionToken<R>,
+	path: string
+): Provider;
+export function provideConfigToken(
+	token: InjectionToken<any>,
+	key: any
+): Provider {
+	return {
+		provide: token,
+		useFactory: (configSvc: RuntimeConfigLoaderService) =>
+			configSvc.getConfigObjectKey(key),
+		deps: [RuntimeConfigLoaderService],
+	};
+}
