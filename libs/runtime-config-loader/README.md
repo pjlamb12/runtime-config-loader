@@ -58,6 +58,19 @@ constructor(private configSvc: MyConfigService) {
 }
 ```
 
+### Nested Key Access (Dot-Notation)
+
+The `getConfigObjectKey` method supports dot-notation for accessing deeply nested configuration values.
+
+```ts
+// For a config like: { api: { baseUrl: 'https://api.com' } }
+const baseUrl = this.configSvc.getConfigObjectKey('api.baseUrl'); // Returns 'https://api.com'
+```
+
+> [!NOTE]
+> When using dot-notation for nested keys, the return type will be `any` unless you provide an explicit generic type to the call:
+> `this.configSvc.getConfigObjectKey<string>('api.baseUrl')`
+
 ### Configuration
 
 The `provideRuntimeConfig` function accepts a configuration object with a `configUrl` property. This can be a single string or an array of strings.

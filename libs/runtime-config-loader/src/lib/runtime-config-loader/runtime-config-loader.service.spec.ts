@@ -168,4 +168,58 @@ describe('RuntimeConfigLoaderService', () => {
 			expect(config).toStrictEqual(null);
 		});
 	});
+
+	describe('Nested Key Access', () => {
+		beforeEach(() => {
+			TestBed.configureTestingModule({
+				providers: [
+					provideHttpClient(),
+					provideHttpClientTesting(),
+					RuntimeConfigLoaderService,
+					{ provide: RuntimeConfig, useValue: mockSingleConfig },
+				],
+			});
+			service = TestBed.inject(RuntimeConfigLoaderService);
+			httpMock = TestBed.inject(HttpTestingController);
+
+			// Load some data
+			service.loadConfig().subscribe();
+			const req = httpMock.expectOne('./test-config.json');
+			req.flush({
+				a: {
+					b: {
+						c: 'deep value',
+					},
+					isNull: null,
+				},
+				flat: 'flat value',
+			});
+		});
+
+		it('should access a flat key', () => {
+			expect(service.getConfigObjectKey('flat')).toBe('flat value');
+		});
+
+		it('should access a nested key', () => {
+			expect(service.getConfigObjectKey('a.b.c')).toBe('deep value');
+		});
+
+		it('should return null for non-existent root key', () => {
+			expect(service.getConfigObjectKey('nope')).toBeNull();
+		});
+
+		it('should return null for non-existent nested key', () => {
+			expect(service.getConfigObjectKey('a.b.nope')).toBeNull();
+		});
+
+		it('should return null for path through null', () => {
+			expect(service.getConfigObjectKey('a.isNull.deep')).toBeNull();
+		});
+
+		it('should return the object if the path ends at an object', () => {
+			expect(service.getConfigObjectKey('a.b')).toEqual({
+				c: 'deep value',
+			});
+		});
+	});
 });
