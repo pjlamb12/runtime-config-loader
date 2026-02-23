@@ -1,5 +1,5 @@
 import { of } from 'rxjs';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, HttpHeaders } from '@angular/common/http';
 import {
 	HttpTestingController,
 	provideHttpClientTesting,
@@ -387,6 +387,50 @@ describe('RuntimeConfigLoaderService', () => {
 			});
 
 			const req = httpMock.expectOne('./test-config.json');
+			req.flush(mockConfigData1);
+		});
+	});
+
+	describe('HTTP Options', () => {
+		it('should pass options such as headers down to HttpClient.get', (done) => {
+			const mockHeaders = new HttpHeaders({
+				Authorization: 'Bearer test-token',
+				'X-Custom-Header': 'custom-value',
+			});
+
+			TestBed.configureTestingModule({
+				providers: [
+					provideHttpClient(),
+					provideHttpClientTesting(),
+					{
+						provide: RuntimeConfig,
+						useValue: {
+							configUrl: './test-config.json',
+							options: {
+								headers: mockHeaders,
+								withCredentials: true,
+							},
+						} as RuntimeConfig,
+					},
+					RuntimeConfigLoaderService,
+				],
+			});
+			service = TestBed.inject(RuntimeConfigLoaderService);
+			httpMock = TestBed.inject(HttpTestingController);
+
+			service.loadConfig().subscribe((config) => {
+				expect(config).toStrictEqual(mockConfigData1);
+				done();
+			});
+
+			const req = httpMock.expectOne('./test-config.json');
+			expect(req.request.headers.get('Authorization')).toEqual(
+				'Bearer test-token'
+			);
+			expect(req.request.headers.get('X-Custom-Header')).toEqual(
+				'custom-value'
+			);
+			expect(req.request.withCredentials).toEqual(true);
 			req.flush(mockConfigData1);
 		});
 	});

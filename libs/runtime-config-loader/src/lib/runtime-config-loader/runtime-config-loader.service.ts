@@ -113,7 +113,7 @@ export class RuntimeConfigLoaderService<T = any> {
 	}
 
 	private makeHttpCall(url: string): Observable<any> {
-		return this._http.get(url).pipe(take(1));
+		return this._http.get(url, this._config?.options).pipe(take(1));
 	}
 
 	getConfig(): T | null {
