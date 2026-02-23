@@ -131,7 +131,4 @@ provideRuntimeConfig({
 });
 ```
 
-> [!TIP]
-> This is useful for maintaining local overrides (e.g., `local.config.json` ignored by git) or separating environment-specific values from global ones.
-
 Make sure that the path(s) you provide are accessible by the Angular application. The `assets` folder is generally the easiest place to serve these files.
