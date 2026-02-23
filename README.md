@@ -6,6 +6,7 @@ Most applications require certain configuration values that can be changed at ru
 
 -   **Flexible Configuration**: Use a single JSON file or multiple files, and combine them into one configuration object.
 -   **Type Safety**: Full support for TypeScript generics to ensure your configuration is strictly typed throughout your app.
+-   **Nested Key Access**: Use dot-notation (e.g., `api.baseUrl`) to access deeply nested configuration values easily.
 -   **Modern DI Integration**: Use the `RUNTIME_CONFIG` injection token for clean, typed access to your config.
 
 ## How to use it

@@ -56,7 +56,24 @@ export class RuntimeConfigLoaderService<T = any> {
 		return this.configObject;
 	}
 
-	getConfigObjectKey<K extends keyof T>(key: K): T[K] | null {
-		return this.configObject ? this.configObject[key] : null;
+	getConfigObjectKey<K extends keyof T>(key: K): T[K] | null;
+	getConfigObjectKey<R = any>(key: string): R | null;
+	getConfigObjectKey(key: any): any {
+		if (!this.configObject) {
+			return null;
+		}
+
+		if (typeof key === 'string' && key.indexOf('.') > -1) {
+			return this.getValueByPath(this.configObject, key);
+		}
+
+		return (this.configObject as any)[key] ?? null;
+	}
+
+	private getValueByPath(obj: any, path: string): any {
+		const value = path.split('.').reduce((prev, curr) => {
+			return prev ? prev[curr] : null;
+		}, obj);
+		return value ?? null;
 	}
 }
