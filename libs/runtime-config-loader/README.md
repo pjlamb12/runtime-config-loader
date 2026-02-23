@@ -6,23 +6,57 @@ Most applications require certain configuration values that can be changed at ru
 
 This library provides an easy way to load one or more JSON files with configuration values or make one or more HTTP GET calls to an API endpoint that returns those values. The config objects that are returned from the call(s) will be combined into a single configuration object. You can then use that configuration throughout the application. The default location of the JSON file is in the `assets` folder, at `./assets/config.json`. When the service loads the file, it stores that configuration object in a local variable which can be accessed via the `getConfig()` and `getConfigObjectKey(key: string)` methods. `getConfig` returns the entire configuration object; `getConfigObjectKey(key: string)` returns part of the configuration object, namely the part defined by the key passed in. In some cases, the `config.json` is not finished loading before other modules/services are, so the above methods will return null. If that is the case, subscribe to the `configSubject` and access the configuration object that way.
 
-## How to Implement
+### How to Implement
 
-In your `app.config.ts` file, add the following to the `providers` array:
+In your Angular application's `app.config.ts` (or wherever you provide your environment providers), use `provideRuntimeConfig`:
 
 ```ts
 import { provideRuntimeConfig } from 'runtime-config-loader';
 
 export const appConfig: ApplicationConfig = {
-  providers: [
-    ...,
-    provideRuntimeConfig({ configUrl: './assets/config.json' }),
-    ...
-  ]
+	providers: [
+		// ...,
+		provideRuntimeConfig({ configUrl: './assets/config.json' }),
+		// ...
+	],
 };
 ```
 
 That's it; it's that simple. The `provideRuntimeConfig` function sets up the `APP_INITIALIZER` token to load the configuration from a file or an API endpoint before the application starts.
+
+### Type Safety with Generics
+
+There are two main ways to use generics for type safety in your application.
+
+#### Option 1: Using the `RUNTIME_CONFIG` Token (Recommended)
+
+You can provide the type directly in `provideRuntimeConfig`. This also sets up the `RUNTIME_CONFIG` injection token, which you can use to inject the typed configuration object directly into your components or services.
+
+```ts
+// app.config.ts
+provideRuntimeConfig<MyConfig>({ configUrl: './assets/config.json' })
+
+// component.ts
+import { RUNTIME_CONFIG } from 'runtime-config-loader';
+
+constructor(@Inject(RUNTIME_CONFIG) private config: MyConfig) {
+	console.log(this.config.apiUrl); // Fully typed!
+}
+```
+
+#### Option 2: Using the Service with a Type Alias
+
+If you prefer to use the `RuntimeConfigLoaderService` methods (like `getConfigObjectKey`), you can define a type alias to avoid repeating the generic type everywhere.
+
+```ts
+// config.service.ts
+export type MyConfigService = RuntimeConfigLoaderService<MyConfig>;
+
+// component.ts
+constructor(private configSvc: MyConfigService) {
+	const apiUrl = this.configSvc.getConfigObjectKey('apiUrl'); // Typed as string | null
+}
+```
 
 ### Configuration
 

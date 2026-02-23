@@ -5,12 +5,10 @@ import { forkJoin, Observable, of, Subject } from 'rxjs';
 import { catchError, take, tap } from 'rxjs/operators';
 
 @Injectable()
-export class RuntimeConfigLoaderService {
+export class RuntimeConfigLoaderService<T = any> {
 	private configUrl: string | string[] = './assets/config.json';
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	private configObject: any = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	public configSubject: Subject<any> = new Subject<any>();
+	private configObject: T | null = null;
+	public configSubject: Subject<T | null> = new Subject<T | null>();
 
 	private _http = inject(HttpClient);
 	private _config = inject(RuntimeConfig, { optional: true });
@@ -21,50 +19,44 @@ export class RuntimeConfigLoaderService {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	loadConfig(): Observable<any> {
+	loadConfig(): Observable<T | null> {
 		const urls: string[] = Array.isArray(this.configUrl)
 			? this.configUrl
 			: [this.configUrl];
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const observables: Observable<any>[] = urls.map((url) =>
 			this.makeHttpCall(url)
 		);
 
 		return forkJoin(observables).pipe(
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			tap((configDataArray: any[]) => {
 				this.configObject = configDataArray.reduce(
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any
 					(acc, configData) => {
 						return { ...acc, ...configData };
 					},
-					{}
+					{} as T
 				);
 
 				this.configSubject.next(this.configObject);
 			}),
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			catchError((err: any) => {
 				console.error('Error loading config: ', err);
 				this.configObject = null;
 				this.configSubject.next(this.configObject);
 				return of(null);
 			})
-		);
+		) as Observable<T | null>;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	private makeHttpCall(url: string): Observable<any> {
 		return this._http.get(url).pipe(take(1));
 	}
 
-	getConfig() {
+	getConfig(): T | null {
 		return this.configObject;
 	}
 
-	getConfigObjectKey(key: string) {
+	getConfigObjectKey<K extends keyof T>(key: K): T[K] | null {
 		return this.configObject ? this.configObject[key] : null;
 	}
 }
