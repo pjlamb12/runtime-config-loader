@@ -1,14 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { RuntimeConfig } from '../runtime-config';
-import { forkJoin, Observable, of, Subject } from 'rxjs';
+import { forkJoin, Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { catchError, take, tap } from 'rxjs/operators';
 
 @Injectable()
 export class RuntimeConfigLoaderService<T = any> {
 	private configUrl: string | string[] = './assets/config.json';
 	private configObject: T | null = null;
-	public configSubject: Subject<T | null> = new Subject<T | null>();
+	public configSubject: Subject<T | null> = new ReplaySubject<T | null>(1);
 
 	private _http = inject(HttpClient);
 	private _config = inject(RuntimeConfig, { optional: true });
