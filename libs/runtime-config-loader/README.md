@@ -186,3 +186,41 @@ provideRuntimeConfig({
 ```
 
 Make sure that the path(s) you provide are accessible by the Angular application. The `assets` folder is generally the easiest place to serve these files.
+
+### Testing
+
+When writing unit tests for components or services that depend on `RUNTIME_CONFIG` or `RuntimeConfigLoaderService`, you can easily mock the configuration using the `provideMockRuntimeConfig` utility.
+
+This avoids making HTTP requests and allows you to instantly return a mocked configuration object of your choosing.
+
+```ts
+import { TestBed } from '@angular/core/testing';
+import {
+	provideMockRuntimeConfig,
+	RUNTIME_CONFIG,
+	RuntimeConfigLoaderService,
+} from 'runtime-config-loader';
+
+describe('MyComponent', () => {
+	beforeEach(() => {
+		TestBed.configureTestingModule({
+			providers: [
+				// Provide the mock configuration object
+				provideMockRuntimeConfig({
+					apiUrl: 'https://mock-api.com',
+					theme: 'dark',
+				}),
+			],
+		});
+	});
+
+	it('should use the mocked config', () => {
+		const config = TestBed.inject(RUNTIME_CONFIG);
+		expect(config.apiUrl).toBe('https://mock-api.com');
+
+		// If testing something that uses the service directly:
+		const service = TestBed.inject(RuntimeConfigLoaderService);
+		expect(service.getConfigObjectKey('theme')).toBe('dark');
+	});
+});
+```
