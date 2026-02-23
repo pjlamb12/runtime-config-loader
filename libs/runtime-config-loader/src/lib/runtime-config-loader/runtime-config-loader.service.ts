@@ -94,9 +94,16 @@ export class RuntimeConfigLoaderService<T = any> {
 			}),
 			catchError((err) => {
 				console.error('Error loading config', err);
-				this.configObject = null;
+
+				if (this._config && this._config.defaultConfig !== undefined) {
+					console.warn('Falling back to default configuration');
+					this.configObject = this._config.defaultConfig;
+				} else {
+					this.configObject = null;
+				}
+
 				this.configSubject.next(this.configObject);
-				return of(null);
+				return of(this.configObject);
 			})
 		) as Observable<T | null>;
 	}

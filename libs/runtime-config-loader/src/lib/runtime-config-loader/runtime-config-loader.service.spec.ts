@@ -434,4 +434,63 @@ describe('RuntimeConfigLoaderService', () => {
 			req.flush(mockConfigData1);
 		});
 	});
+
+	describe('Fallback Configuration', () => {
+		const fallbackConfig = { apiUrl: 'https://fallback-api.com' };
+
+		it('should fall back to defaultConfig if request fails', (done) => {
+			TestBed.configureTestingModule({
+				providers: [
+					provideHttpClient(),
+					provideHttpClientTesting(),
+					RuntimeConfigLoaderService,
+					{
+						provide: RuntimeConfig,
+						useValue: {
+							configUrl: './test-config.json',
+							defaultConfig: fallbackConfig,
+						} as RuntimeConfig,
+					},
+				],
+			});
+			service = TestBed.inject(RuntimeConfigLoaderService);
+			httpMock = TestBed.inject(HttpTestingController);
+
+			service.loadConfig().subscribe((config) => {
+				expect(config).toStrictEqual(fallbackConfig);
+				expect(service.getConfig()).toStrictEqual(fallbackConfig);
+				done();
+			});
+
+			const req = httpMock.expectOne('./test-config.json');
+			req.flush('Error', { status: 500, statusText: 'Server Error' });
+		});
+
+		it('should return null on failure if defaultConfig is not provided', (done) => {
+			TestBed.configureTestingModule({
+				providers: [
+					provideHttpClient(),
+					provideHttpClientTesting(),
+					RuntimeConfigLoaderService,
+					{
+						provide: RuntimeConfig,
+						useValue: {
+							configUrl: './test-config.json',
+						} as RuntimeConfig,
+					},
+				],
+			});
+			service = TestBed.inject(RuntimeConfigLoaderService);
+			httpMock = TestBed.inject(HttpTestingController);
+
+			service.loadConfig().subscribe((config) => {
+				expect(config).toBeNull();
+				expect(service.getConfig()).toBeNull();
+				done();
+			});
+
+			const req = httpMock.expectOne('./test-config.json');
+			req.flush('Error', { status: 500, statusText: 'Server Error' });
+		});
+	});
 });
