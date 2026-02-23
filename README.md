@@ -129,6 +129,22 @@ provideRuntimeConfig({
 
 If an attribute is repeated in multiple configuration files, the latest value is kept. For example, if `apiUrl` exists in both files above, the value from `config-2.json` will override the value from `config-1.json`.
 
+#### Fallback Configuration
+
+If you'd like the application to gracefully fall back to a default configuration in the event that the config file(s) fail to load (e.g., due to network errors or 404s), you can provide a `defaultConfig` object.
+
+```ts
+provideRuntimeConfig({
+	configUrl: './assets/config.json',
+	defaultConfig: {
+		apiUrl: 'https://fallback.api.com',
+		theme: 'light',
+	},
+});
+```
+
+When a failure occurs and `defaultConfig` is provided, the application will emit a console warning (`Falling back to default configuration`), load the provided object, and proceed with initialization.
+
 ### HTTP Options and Headers
 
 You can pass standard Angular `HttpClient` options (such as custom `HttpHeaders` or `HttpContext`) to the underlying HTTP request doing the fetching.

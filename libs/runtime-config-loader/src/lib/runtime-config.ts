@@ -3,6 +3,7 @@ import { HttpContext, HttpHeaders, HttpParams } from '@angular/common/http';
 
 export class RuntimeConfig<T = any> {
 	configUrl: string | string[];
+	defaultConfig?: T;
 	validator?: (
 		config: T
 	) => boolean | Promise<boolean> | Observable<boolean> | void;
@@ -27,6 +28,7 @@ export class RuntimeConfig<T = any> {
 	constructor(
 		obj: {
 			configUrl?: string | string[];
+			defaultConfig?: T;
 			validator?: (
 				config: T
 			) => boolean | Promise<boolean> | Observable<boolean> | void;
@@ -50,6 +52,7 @@ export class RuntimeConfig<T = any> {
 		} = {}
 	) {
 		this.configUrl = obj.configUrl || './assets/config.json';
+		this.defaultConfig = obj.defaultConfig;
 		this.validator = obj.validator;
 		this.options = obj.options;
 	}
