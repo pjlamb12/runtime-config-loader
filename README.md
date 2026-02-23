@@ -58,6 +58,37 @@ constructor(private configSvc: MyConfigService) {
 }
 ```
 
+#### Option 3: Specific Configuration Tokens
+
+If you prefer your components to depend only on specific configuration values rather than the entire configuration object, you can use the `provideConfigToken` helper. This allows you to inject individual configuration properties cleanly and maintain strict boundaries.
+
+```ts
+import { InjectionToken } from '@angular/core';
+import { provideRuntimeConfig, provideConfigToken } from 'runtime-config-loader';
+
+// 1. Define tokens for your specific configuration values
+export const API_URL = new InjectionToken<string>('API_URL');
+
+// 2. Provide them using the helper
+export const appConfig: ApplicationConfig = {
+	providers: [
+		provideRuntimeConfig<MyConfig>({ configUrl: './assets/config.json' }),
+
+		// Provide the specific token mapping it to a key in your config
+		provideConfigToken(API_URL, 'apiUrl'),
+
+		// It also supports dot-notation for nested keys
+		// provideConfigToken(NESTED_TOKEN, 'api.baseUrl')
+	],
+};
+
+// 3. Inject them directly
+// component.ts
+constructor(@Inject(API_URL) private apiUrl: string) {
+	console.log(this.apiUrl); // Typed as string | null
+}
+```
+
 ### Nested Key Access (Dot-Notation)
 
 The `getConfigObjectKey` method supports dot-notation for accessing deeply nested configuration values.
