@@ -1,3 +1,4 @@
+import { of } from 'rxjs';
 import { provideHttpClient } from '@angular/common/http';
 import {
 	HttpTestingController,
@@ -248,6 +249,145 @@ describe('RuntimeConfigLoaderService', () => {
 				expect(config).toStrictEqual(mockConfigData1);
 				done();
 			});
+		});
+	});
+
+	describe('Validation', () => {
+		it('should load config if validator returns true', (done) => {
+			TestBed.configureTestingModule({
+				providers: [
+					provideHttpClient(),
+					provideHttpClientTesting(),
+					RuntimeConfigLoaderService,
+					{
+						provide: RuntimeConfig,
+						useValue: {
+							configUrl: './test-config.json',
+							validator: () => true,
+						},
+					},
+				],
+			});
+			service = TestBed.inject(RuntimeConfigLoaderService);
+			httpMock = TestBed.inject(HttpTestingController);
+
+			service.loadConfig().subscribe((config) => {
+				expect(config).toStrictEqual(mockConfigData1);
+				done();
+			});
+
+			const req = httpMock.expectOne('./test-config.json');
+			req.flush(mockConfigData1);
+		});
+
+		it('should set config to null if validator returns false', (done) => {
+			TestBed.configureTestingModule({
+				providers: [
+					provideHttpClient(),
+					provideHttpClientTesting(),
+					RuntimeConfigLoaderService,
+					{
+						provide: RuntimeConfig,
+						useValue: {
+							configUrl: './test-config.json',
+							validator: () => false,
+						},
+					},
+				],
+			});
+			service = TestBed.inject(RuntimeConfigLoaderService);
+			httpMock = TestBed.inject(HttpTestingController);
+
+			service.loadConfig().subscribe((config) => {
+				expect(config).toBeNull();
+				done();
+			});
+
+			const req = httpMock.expectOne('./test-config.json');
+			req.flush(mockConfigData1);
+		});
+
+		it('should load config if async validator (Promise) returns true', (done) => {
+			TestBed.configureTestingModule({
+				providers: [
+					provideHttpClient(),
+					provideHttpClientTesting(),
+					RuntimeConfigLoaderService,
+					{
+						provide: RuntimeConfig,
+						useValue: {
+							configUrl: './test-config.json',
+							validator: () => Promise.resolve(true),
+						},
+					},
+				],
+			});
+			service = TestBed.inject(RuntimeConfigLoaderService);
+			httpMock = TestBed.inject(HttpTestingController);
+
+			service.loadConfig().subscribe((config) => {
+				expect(config).toStrictEqual(mockConfigData1);
+				done();
+			});
+
+			const req = httpMock.expectOne('./test-config.json');
+			req.flush(mockConfigData1);
+		});
+
+		it('should load config if async validator (Observable) returns true', (done) => {
+			TestBed.configureTestingModule({
+				providers: [
+					provideHttpClient(),
+					provideHttpClientTesting(),
+					RuntimeConfigLoaderService,
+					{
+						provide: RuntimeConfig,
+						useValue: {
+							configUrl: './test-config.json',
+							validator: () => of(true),
+						},
+					},
+				],
+			});
+			service = TestBed.inject(RuntimeConfigLoaderService);
+			httpMock = TestBed.inject(HttpTestingController);
+
+			service.loadConfig().subscribe((config) => {
+				expect(config).toStrictEqual(mockConfigData1);
+				done();
+			});
+
+			const req = httpMock.expectOne('./test-config.json');
+			req.flush(mockConfigData1);
+		});
+
+		it('should set config to null if validator throws', (done) => {
+			TestBed.configureTestingModule({
+				providers: [
+					provideHttpClient(),
+					provideHttpClientTesting(),
+					RuntimeConfigLoaderService,
+					{
+						provide: RuntimeConfig,
+						useValue: {
+							configUrl: './test-config.json',
+							validator: () => {
+								throw new Error('Validation error');
+							},
+						},
+					},
+				],
+			});
+			service = TestBed.inject(RuntimeConfigLoaderService);
+			httpMock = TestBed.inject(HttpTestingController);
+
+			service.loadConfig().subscribe((config) => {
+				expect(config).toBeNull();
+				done();
+			});
+
+			const req = httpMock.expectOne('./test-config.json');
+			req.flush(mockConfigData1);
 		});
 	});
 });
