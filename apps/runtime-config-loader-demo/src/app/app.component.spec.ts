@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { RuntimeConfigLoaderService } from 'runtime-config-loader';
-import { AppComponent } from './app.component';
+import { AppComponent, TEST_VALUE } from './app.component';
 
 describe('AppComponent', () => {
 	beforeEach(async () => {
@@ -10,8 +10,12 @@ describe('AppComponent', () => {
 				{
 					provide: RuntimeConfigLoaderService,
 					useValue: {
-						getConfig: () => ({}),
+						getConfig: () => ({ testValue: 'mock-test' }),
 					},
+				},
+				{
+					provide: TEST_VALUE,
+					useValue: 'mock-test',
 				},
 			],
 		}).compileComponents();
