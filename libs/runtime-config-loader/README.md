@@ -129,6 +129,29 @@ provideRuntimeConfig({
 
 If an attribute is repeated in multiple configuration files, the latest value is kept. For example, if `apiUrl` exists in both files above, the value from `config-2.json` will override the value from `config-1.json`.
 
+### HTTP Options and Headers
+
+You can pass standard Angular `HttpClient` options (such as custom `HttpHeaders` or `HttpContext`) to the underlying HTTP request doing the fetching.
+
+Pass an `options` object into the `provideRuntimeConfig` function:
+
+```ts
+import { HttpHeaders } from '@angular/common/http';
+
+provideRuntimeConfig({
+	configUrl: './assets/config.json',
+	options: {
+		headers: new HttpHeaders({
+			Authorization: 'Bearer YOUR_TOKEN_HERE',
+			'X-Custom-Header': 'custom-value',
+		}),
+		withCredentials: true,
+	},
+});
+```
+
+This is useful for APIs that require authentication or tracking headers to return configuration data.
+
 ### Runtime Schema Validation
 
 You can provide an optional `validator` function to verify the configuration before the application starts. If validation fails (returns `false`, throws an error, or emits an error), the configuration will be set to `null`.
