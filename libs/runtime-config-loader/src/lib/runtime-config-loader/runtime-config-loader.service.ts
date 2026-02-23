@@ -1,8 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { RuntimeConfig } from '../runtime-config';
-import { forkJoin, Observable, of, ReplaySubject, Subject } from 'rxjs';
-import { catchError, take, tap } from 'rxjs/operators';
+import {
+	forkJoin,
+	from,
+	isObservable,
+	Observable,
+	of,
+	ReplaySubject,
+	Subject,
+} from 'rxjs';
+import { catchError, map, take, tap, switchMap } from 'rxjs/operators';
 
 @Injectable()
 export class RuntimeConfigLoaderService<T = any> {
@@ -29,23 +37,79 @@ export class RuntimeConfigLoaderService<T = any> {
 		);
 
 		return forkJoin(observables).pipe(
-			tap((configDataArray: any[]) => {
-				this.configObject = configDataArray.reduce(
+			map((configDataArray: any[]) => {
+				const combinedConfig = configDataArray.reduce(
 					(acc, configData) => {
 						return { ...acc, ...configData };
 					},
 					{} as T
 				);
 
+				if (this._config && this._config.validator) {
+					const validationResult =
+						this._config.validator(combinedConfig);
+
+					if (isObservable(validationResult)) {
+						return validationResult.pipe(
+							map((isValid) =>
+								this.handleValidationResult(
+									isValid,
+									combinedConfig
+								)
+							),
+							catchError((err) => {
+								console.error('Config validation error', err);
+								return of(this.handleValidationResult(false));
+							})
+						);
+					} else if (validationResult instanceof Promise) {
+						return from(validationResult).pipe(
+							map((isValid) =>
+								this.handleValidationResult(
+									isValid,
+									combinedConfig
+								)
+							),
+							catchError((err) => {
+								console.error('Config validation error', err);
+								return of(this.handleValidationResult(false));
+							})
+						);
+					} else {
+						const isValid =
+							validationResult === undefined ||
+							validationResult === true;
+						return of(
+							this.handleValidationResult(isValid, combinedConfig)
+						);
+					}
+				}
+
+				return of(this.handleValidationResult(true, combinedConfig));
+			}),
+			switchMap((obs) => obs),
+			tap((config) => {
+				this.configObject = config;
 				this.configSubject.next(this.configObject);
 			}),
-			catchError((err: any) => {
-				console.error('Error loading config: ', err);
+			catchError((err) => {
+				console.error('Error loading config', err);
 				this.configObject = null;
 				this.configSubject.next(this.configObject);
 				return of(null);
 			})
 		) as Observable<T | null>;
+	}
+
+	private handleValidationResult(
+		isValid: boolean | void,
+		config?: T
+	): T | null {
+		if (isValid === false) {
+			console.error('Config validation failed');
+			return null;
+		}
+		return config || null;
 	}
 
 	private makeHttpCall(url: string): Observable<any> {

@@ -98,6 +98,39 @@ provideRuntimeConfig({
 
 If an attribute is repeated in multiple configuration files, the latest value is kept. For example, if `apiUrl` exists in both files above, the value from `config-2.json` will override the value from `config-1.json`.
 
+### Runtime Schema Validation
+
+You can provide an optional `validator` function to verify the configuration before the application starts. If validation fails (returns `false`, throws an error, or emits an error), the configuration will be set to `null`.
+
+The validator supports synchronous results, `Promise<boolean>`, and `Observable<boolean>`.
+
+```ts
+provideRuntimeConfig<MyConfig>({
+	configUrl: './assets/config.json',
+	validator: (config) => {
+		return !!config.apiUrl && !!config.apiKey;
+	},
+});
+```
+
+#### Integration with Zod
+
+This feature integrates well with schema validation libraries like [Zod](https://zod.dev):
+
+```ts
+import { z } from 'zod';
+
+const ConfigSchema = z.object({
+	apiUrl: z.string().url(),
+	apiKey: z.string().min(10),
+});
+
+provideRuntimeConfig({
+	configUrl: './assets/config.json',
+	validator: (config) => ConfigSchema.safeParse(config).success,
+});
+```
+
 > [!TIP]
 > This is useful for maintaining local overrides (e.g., `local.config.json` ignored by git) or separating environment-specific values from global ones.
 

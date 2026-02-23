@@ -1,0 +1,48 @@
+(node:66335) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+
+> nx run runtime-config-loader:lint
+
+Linting "runtime-config-loader"...
+[0m[0m
+[0m[4m/Users/pjlamb12/oss/runtime-config-loader/libs/runtime-config-loader/src/lib/runtime-config-loader.provider.ts[24m[0m
+[0m  [2m16:50[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m22:42[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[4m/Users/pjlamb12/oss/runtime-config-loader/libs/runtime-config-loader/src/lib/runtime-config-loader/runtime-config-loader.service.spec.ts[24m[0m
+[0m  [2m337:19[22m  [31merror[39m  Require statement not part of import statement  [2m@typescript-eslint/no-var-requires[22m[0m
+[0m[0m
+[0m[4m/Users/pjlamb12/oss/runtime-config-loader/libs/runtime-config-loader/src/lib/runtime-config-loader/runtime-config-loader.service.ts[24m[0m
+[0m   [2m16:45[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m   [2m35:33[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m   [2m40:26[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m115:48[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m124:25[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m125:26[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m125:32[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m134:32[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m137:30[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m137:50[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[4m/Users/pjlamb12/oss/runtime-config-loader/libs/runtime-config-loader/src/lib/runtime-config.ts[24m[0m
+[0m  [2m3:32[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[31m[1m✖ 14 problems (1 error, 13 warnings)[22m[39m[0m
+[0m[31m[1m[22m[39m[0m
+✖ 14 problems (1 error, 13 warnings)
+
+
+
+ NX   Running target lint for project runtime-config-loader failed
+
+Failed tasks:
+
+- runtime-config-loader:lint
+
+Hint: run the command with --verbose for more details.
+
+
+ NX   Nx Cloud encountered some problems
+
+This workspace is more than three days old and is not connected. Workspaces must be connected within 3 days of creation. Claim your workspace at https://cloud.nx.app. (code: 401)
+

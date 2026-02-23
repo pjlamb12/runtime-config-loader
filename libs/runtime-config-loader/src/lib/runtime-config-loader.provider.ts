@@ -20,7 +20,7 @@ export function initConfig(configSvc: RuntimeConfigLoaderService) {
 }
 
 export function provideRuntimeConfig<T = any>(
-	config: RuntimeConfig
+	config: RuntimeConfig<T>
 ): EnvironmentProviders {
 	const providers: (Provider | EnvironmentProviders)[] = [
 		{
