@@ -1,5 +1,6 @@
 import {
 	EnvironmentProviders,
+	InjectionToken,
 	Provider,
 	inject,
 	makeEnvironmentProviders,
@@ -12,11 +13,13 @@ import {
 import { RuntimeConfig } from './runtime-config';
 import { RuntimeConfigLoaderService } from './runtime-config-loader/runtime-config-loader.service';
 
+export const RUNTIME_CONFIG = new InjectionToken<any>('RUNTIME_CONFIG');
+
 export function initConfig(configSvc: RuntimeConfigLoaderService) {
 	return () => configSvc.loadConfig();
 }
 
-export function provideRuntimeConfig(
+export function provideRuntimeConfig<T = any>(
 	config: RuntimeConfig
 ): EnvironmentProviders {
 	const providers: (Provider | EnvironmentProviders)[] = [
@@ -25,6 +28,12 @@ export function provideRuntimeConfig(
 			useValue: config,
 		},
 		RuntimeConfigLoaderService,
+		{
+			provide: RUNTIME_CONFIG,
+			useFactory: (configSvc: RuntimeConfigLoaderService<T>) =>
+				configSvc.getConfig(),
+			deps: [RuntimeConfigLoaderService],
+		},
 		provideAppInitializer(() => {
 			const initializerFn = initConfig(
 				inject(RuntimeConfigLoaderService)

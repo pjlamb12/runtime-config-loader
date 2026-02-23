@@ -26,20 +26,35 @@ That's it; it's that simple. The `provideRuntimeConfig` function sets up the `AP
 
 ### Type Safety with Generics
 
-You can provide a type for your configuration object to get full type safety and auto-completion when using the `RuntimeConfigLoaderService`.
+There are two main ways to use generics for type safety in your application.
+
+#### Option 1: Using the `RUNTIME_CONFIG` Token (Recommended)
+
+You can provide the type directly in `provideRuntimeConfig`. This also sets up the `RUNTIME_CONFIG` injection token, which you can use to inject the typed configuration object directly into your components or services.
 
 ```ts
-interface MyConfig {
-	apiUrl: string;
-	featureFlags: {
-		newDashboard: boolean;
-	};
-}
+// app.config.ts
+provideRuntimeConfig<MyConfig>({ configUrl: './assets/config.json' })
 
-// In your component or service:
-constructor(private configSvc: RuntimeConfigLoaderService<MyConfig>) {
-	const config = this.configSvc.getConfig(); // config is typed as MyConfig | null
-	const apiUrl = this.configSvc.getConfigObjectKey('apiUrl'); // apiUrl is typed as string | null
+// component.ts
+import { RUNTIME_CONFIG } from 'runtime-config-loader';
+
+constructor(@Inject(RUNTIME_CONFIG) private config: MyConfig) {
+	console.log(this.config.apiUrl); // Fully typed!
+}
+```
+
+#### Option 2: Using the Service with a Type Alias
+
+If you prefer to use the `RuntimeConfigLoaderService` methods (like `getConfigObjectKey`), you can define a type alias to avoid repeating the generic type everywhere.
+
+```ts
+// config.service.ts
+export type MyConfigService = RuntimeConfigLoaderService<MyConfig>;
+
+// component.ts
+constructor(private configSvc: MyConfigService) {
+	const apiUrl = this.configSvc.getConfigObjectKey('apiUrl'); // Typed as string | null
 }
 ```
 
