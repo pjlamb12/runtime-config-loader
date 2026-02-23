@@ -222,4 +222,32 @@ describe('RuntimeConfigLoaderService', () => {
 			});
 		});
 	});
+
+	describe('ReplaySubject Behavior', () => {
+		beforeEach(() => {
+			TestBed.configureTestingModule({
+				providers: [
+					provideHttpClient(),
+					provideHttpClientTesting(),
+					RuntimeConfigLoaderService,
+					{ provide: RuntimeConfig, useValue: mockSingleConfig },
+				],
+			});
+			service = TestBed.inject(RuntimeConfigLoaderService);
+			httpMock = TestBed.inject(HttpTestingController);
+		});
+
+		it('should provide the config to late subscribers', (done) => {
+			// 1. Load the config
+			service.loadConfig().subscribe();
+			const req = httpMock.expectOne('./test-config.json');
+			req.flush(mockConfigData1);
+
+			// 2. Subscribe AFTER loading is complete
+			service.configSubject.subscribe((config) => {
+				expect(config).toStrictEqual(mockConfigData1);
+				done();
+			});
+		});
+	});
 });
